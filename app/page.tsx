@@ -2,6 +2,7 @@
 
 import { Twitch } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { LiveStatus } from '@/components/LiveStatus';
 
 export default function Home() {
   return (
@@ -35,6 +36,16 @@ export default function Home() {
             We&apos;re your one-stop shop for nostalgia-fueled gaming, epic beatboxing sessions,
             and a chill community to vibe with. Grab a slice and join the fun!
           </p>
+        </motion.div>
+
+        {/* Live Status Indicator */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="flex justify-center mb-8"
+        >
+          <LiveStatus />
         </motion.div>
 
         {/* CTA Button */}

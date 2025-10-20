@@ -31,6 +31,26 @@ npm start
 
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
+## 🔴 Live Twitch Integration
+
+**Already Integrated!** The site includes real-time Twitch status:
+
+- ✅ **Live Status Indicator** - Shows when stream is live with animated badge
+- ✅ **Viewer Count** - Displays current viewer count when live
+- ✅ **Game Name** - Shows what game is being played
+- ✅ **Stream Title** - Displays current stream title
+- ✅ **Auto-Refresh** - Updates every 60 seconds automatically
+
+**Setup Required:**
+Create `.env.local` with your Twitch credentials:
+```bash
+TWITCH_CLIENT_ID=your_client_id
+TWITCH_CLIENT_SECRET=your_client_secret
+TWITCH_CHANNEL_NAME=verygoodpizza
+```
+
+Get credentials at: [Twitch Developer Console](https://dev.twitch.tv/console)
+
 ## 🎨 Design Features
 
 ### Color Palette
@@ -84,38 +104,39 @@ Update `app/layout.tsx` for:
 ## 🔌 Future Enhancements
 
 ### Phase 2 Features (Ready to Add)
-1. **Live Status Integration**
-   - Twitch API for real-time "LIVE" indicator
-   - Automatic stream countdown timer
-
-2. **Discord Integration**
+1. **Discord Integration**
    - Member count widget
    - Invite link with preview
 
-3. **Stream Schedule**
+2. **Stream Schedule**
    - Weekly calendar
    - Timezone auto-detection
    - Add-to-calendar buttons
 
-4. **Content Showcase**
+3. **Content Showcase**
    - Twitch clips embed
    - YouTube videos grid
    - Filter by category (gaming/beatboxing)
 
-### API Setup (When Ready)
+### API Setup
 
-Create `.env.local`:
+**Twitch (Already Configured):**
 ```bash
-# Twitch
-NEXT_PUBLIC_TWITCH_CLIENT_ID=your_client_id
-TWITCH_CLIENT_SECRET=your_secret
+# See "Live Twitch Integration" section above for setup
+TWITCH_CLIENT_ID=your_client_id
+TWITCH_CLIENT_SECRET=your_client_secret
+TWITCH_CHANNEL_NAME=verygoodpizza
+```
 
-# YouTube
-NEXT_PUBLIC_YOUTUBE_API_KEY=your_api_key
+**Future Integrations:**
+```bash
+# YouTube (when adding video showcase)
+YOUTUBE_API_KEY=your_api_key
+YOUTUBE_CHANNEL_ID=@verygoodpizzaofficial
 
-# Discord
-NEXT_PUBLIC_DISCORD_SERVER_ID=your_server_id
-DISCORD_BOT_TOKEN=your_bot_token
+# Discord (when adding member count)
+DISCORD_SERVER_ID=your_server_id
+DISCORD_INVITE_URL=https://discord.gg/yourserver
 ```
 
 ## 📊 Performance
