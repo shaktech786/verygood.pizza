@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://verygood.pizza'),
   title: "Very Good Pizza - Nostalgia Gaming & Beatboxing Streams",
   description: "Welcome to the VGP universe! Nostalgia-fueled gaming, epic beatboxing sessions, and a chill community. It's gaming. Not DiGiorno.",
   keywords: ["gaming", "twitch", "beatboxing", "nostalgia gaming", "streaming", "very good pizza", "VGP"],
