@@ -34,7 +34,7 @@ export function Footer() {
                   Very Good Pizza
                 </div>
                 <div className="text-purple-700 dark:text-purple-400 font-semibold">
-                  It's Gaming. Not DiGiorno.
+                  It&apos;s Gaming. Not DiGiorno.
                 </div>
               </div>
             </div>

@@ -26,7 +26,7 @@ export default function Home() {
             Very Good Pizza
           </h1>
           <p className="text-xl md:text-2xl text-purple-700 dark:text-purple-400 font-semibold mb-6">
-            It's Gaming. Not DiGiorno.
+            It&apos;s Gaming. Not DiGiorno.
           </p>
         </div>
 
