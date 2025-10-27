@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Users, Eye } from 'lucide-react';
 
 interface StreamStatus {
   isLive: boolean;
@@ -40,9 +38,15 @@ export function LiveStatus() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 text-gray-400">
-        <div className="w-3 h-3 rounded-full bg-gray-600 animate-pulse" />
-        <span className="text-sm">Checking live status...</span>
+      <div
+        className="inline-flex items-center gap-3 px-4 py-2 bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg"
+        role="status"
+        aria-live="polite"
+      >
+        <div className="w-3 h-3 rounded-full bg-gray-400 dark:bg-gray-600" />
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          Checking live status...
+        </span>
       </div>
     );
   }
@@ -53,67 +57,82 @@ export function LiveStatus() {
 
   if (!status.isLive) {
     return (
-      <div className="flex items-center justify-center gap-2 text-gray-400">
-        <div className="w-3 h-3 rounded-full bg-gray-600" />
-        <span className="text-sm">Currently Offline</span>
+      <div
+        className="inline-flex items-center gap-3 px-4 py-2 bg-gray-100 dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg"
+        role="status"
+        aria-live="polite"
+      >
+        <div className="w-3 h-3 rounded-full bg-gray-400 dark:bg-gray-600" />
+        <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+          Currently Offline
+        </span>
       </div>
     );
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="w-full max-w-2xl mx-auto"
-    >
+    <div className="w-full max-w-2xl">
       {/* Live Indicator Badge */}
-      <div className="mb-4 flex items-center justify-center gap-3">
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [1, 0.8, 1],
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          className="relative"
-        >
-          <div className="w-4 h-4 rounded-full bg-red-500" />
-          <div className="absolute inset-0 w-4 h-4 rounded-full bg-red-500 animate-ping" />
-        </motion.div>
-        <span className="text-red-500 font-bold text-lg uppercase tracking-wider">
-          LIVE NOW
-        </span>
+      <div
+        className="mb-4 flex items-center justify-center gap-3 flex-wrap"
+        role="status"
+        aria-live="polite"
+      >
+        <div className="relative flex items-center gap-2">
+          <div className="relative">
+            <div className="w-4 h-4 rounded-full bg-red-600" />
+            <div className="absolute inset-0 w-4 h-4 rounded-full bg-red-600 opacity-75 animate-ping" style={{ animationDuration: '2s' }} />
+          </div>
+          <span className="text-red-600 dark:text-red-500 font-bold text-base md:text-lg uppercase tracking-wide">
+            Live Now
+          </span>
+        </div>
         {status.viewerCount > 0 && (
-          <div className="flex items-center gap-1 text-gray-300 bg-gray-800/50 px-3 py-1 rounded-full">
-            <Eye className="w-4 h-4" />
-            <span className="font-semibold">{status.viewerCount.toLocaleString()}</span>
+          <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 px-4 py-1.5 rounded-full border-2 border-gray-200 dark:border-gray-700">
+            <svg
+              className="w-4 h-4 text-gray-600 dark:text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+              />
+            </svg>
+            <span className="font-semibold text-gray-900 dark:text-gray-100">
+              {status.viewerCount.toLocaleString()}
+            </span>
+            <span className="visually-hidden">viewers</span>
           </div>
         )}
       </div>
 
       {/* Stream Info */}
       {(status.gameName || status.title) && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-gray-800/30 backdrop-blur-sm border border-gray-700/50 rounded-lg p-4 text-center"
-        >
+        <div className="bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-700 rounded-lg p-4 text-center">
           {status.gameName && (
-            <div className="text-cyan-400 font-semibold mb-2">
-              🎮 Playing: {status.gameName}
+            <div className="text-purple-700 dark:text-purple-400 font-semibold mb-2 flex items-center justify-center gap-2">
+              <span aria-hidden="true">🎮</span>
+              <span>Playing: {status.gameName}</span>
             </div>
           )}
           {status.title && (
-            <div className="text-gray-300 text-sm line-clamp-2">
+            <p className="text-gray-700 dark:text-gray-300 text-sm md:text-base">
               {status.title}
-            </div>
+            </p>
           )}
-        </motion.div>
+        </div>
       )}
-    </motion.div>
+    </div>
   );
 }

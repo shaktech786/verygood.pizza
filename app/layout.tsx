@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { Navigation } from "@/components/Navigation";
+import { Footer } from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,6 +20,13 @@ export const metadata: Metadata = {
   description: "Welcome to the VGP universe! Nostalgia-fueled gaming, epic beatboxing sessions, and a chill community. It's gaming. Not DiGiorno.",
   keywords: ["gaming", "twitch", "beatboxing", "nostalgia gaming", "streaming", "very good pizza", "VGP"],
   authors: [{ name: "Very Good Pizza" }],
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
   openGraph: {
     title: "Very Good Pizza - Nostalgia Gaming & Beatboxing",
     description: "Join the VGP universe for nostalgia gaming, beats, and good vibes!",
@@ -52,7 +61,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
+        <Navigation />
         {children}
+        <Footer />
       </body>
     </html>
   );
