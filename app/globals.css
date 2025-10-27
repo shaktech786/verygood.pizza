@@ -5,12 +5,22 @@
    =========================== */
 
 :root {
-  /* Core Colors - WCAG AAA Compliant */
-  --background: #ffffff;
-  --foreground: #1a1a1a;
-  --primary: #6b21a8;
-  --secondary: #0047ab;
-  --accent: #dc2626;
+  /* Core Colors - Gaming Vibrant Palette */
+  --background: #0a0118;
+  --foreground: #f0f0f0;
+  --primary: #ff00ff;
+  --secondary: #00ffff;
+  --accent: #ff3366;
+
+  /* Gaming Colors */
+  --neon-pink: #ff00ff;
+  --neon-cyan: #00ffff;
+  --neon-green: #00ff88;
+  --neon-yellow: #ffff00;
+  --neon-orange: #ff6600;
+  --purple-dark: #1a0033;
+  --purple-mid: #4a0080;
+  --purple-light: #8000ff;
 
   /* Semantic Colors */
   --success: #059669;
@@ -50,14 +60,14 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Dark Mode - High Contrast */
-@media (prefers-color-scheme: dark) {
+/* Light Mode - Gaming Style */
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #f5f5f5;
-    --primary: #a855f7;
-    --secondary: #60a5fa;
-    --accent: #ef4444;
+    --background: #ffffff;
+    --foreground: #1a1a1a;
+    --primary: #8000ff;
+    --secondary: #00d4ff;
+    --accent: #ff3366;
   }
 }
 
@@ -248,4 +258,140 @@ textarea {
     padding-left: 2rem;
     padding-right: 2rem;
   }
+}
+
+/* ===========================
+   GAMING AESTHETICS
+   =========================== */
+
+/* Neon Glow Effects */
+.neon-glow {
+  text-shadow:
+    0 0 10px currentColor,
+    0 0 20px currentColor,
+    0 0 30px currentColor,
+    0 0 40px currentColor;
+}
+
+.neon-border {
+  box-shadow:
+    0 0 5px currentColor,
+    0 0 10px currentColor,
+    0 0 15px currentColor,
+    inset 0 0 5px currentColor;
+  border: 2px solid currentColor;
+}
+
+/* Retro Scan Lines */
+@keyframes scanlines {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+}
+
+.scanlines::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15),
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  animation: scanlines 10s linear infinite;
+  opacity: 0.1;
+}
+
+/* Pixelated Border */
+.pixel-border {
+  image-rendering: pixelated;
+  border-image-slice: 3;
+  border-image-width: 3;
+  border-image-repeat: stretch;
+  border-style: solid;
+  border-width: 3px;
+}
+
+/* Gradient Backgrounds */
+.gradient-gaming {
+  background: linear-gradient(
+    135deg,
+    var(--purple-dark) 0%,
+    var(--purple-mid) 50%,
+    var(--neon-pink) 100%
+  );
+}
+
+.gradient-cyber {
+  background: linear-gradient(
+    to right,
+    var(--neon-cyan),
+    var(--neon-pink),
+    var(--neon-yellow)
+  );
+}
+
+/* Hover Glow Effect */
+.hover-glow {
+  transition: all 0.3s ease;
+}
+
+.hover-glow:hover {
+  filter: drop-shadow(0 0 10px currentColor)
+          drop-shadow(0 0 20px currentColor);
+  transform: scale(1.05);
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0%, 100% {
+    transform: translate(0);
+  }
+  33% {
+    transform: translate(-2px, 2px);
+  }
+  66% {
+    transform: translate(2px, -2px);
+  }
+}
+
+.glitch:hover {
+  animation: glitch 0.3s infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float-animation {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Pulse Glow */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+  }
+}
+
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
 }
