@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { LiveStatus } from '@/components/LiveStatus';
+import { CommonPhrases } from '@/components/CommonPhrases';
 
 export default function Home() {
   return (
@@ -136,6 +137,15 @@ export default function Home() {
               </a>
             ))}
           </div>
+        </section>
+
+        {/* Common Phrases Section */}
+        <section
+          className="border-t-4 pt-16 mt-16"
+          style={{borderImage: 'linear-gradient(to right, var(--neon-green), var(--neon-pink), var(--neon-cyan)) 1'}}
+          aria-labelledby="phrases-heading"
+        >
+          <CommonPhrases />
         </section>
       </main>
 
