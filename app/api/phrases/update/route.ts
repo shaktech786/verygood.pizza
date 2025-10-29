@@ -55,46 +55,50 @@ export async function POST(request: Request) {
     let successCount = 0;
     let failCount = 0;
 
-    // Limit to 5 most recent videos to avoid long processing times
-    const videosToProcess = videos.slice(0, 5);
+    // Process ALL videos from the channel
+    console.log(`Processing all ${videos.length} videos...`);
 
-    for (const video of videosToProcess) {
+    for (let i = 0; i < videos.length; i++) {
+      const video = videos[i];
       try {
-        console.log(`Processing video: ${video.title} (${video.id})`);
+        console.log(`[${i + 1}/${videos.length}] Processing: ${video.title} (${video.id})`);
 
         // Check cache first
         const cached = await transcriptGenerator.getCachedTranscript(video.id);
         let result;
 
         if (cached) {
-          console.log(`Using cached transcript for ${video.id}`);
+          console.log(`  ✓ Using cached transcript`);
           result = cached;
         } else {
           // Generate new transcript
+          console.log(`  → Downloading and transcribing video...`);
           const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
-          result = await transcriptGenerator.generateFromYouTube(videoUrl);
+          result = await transcriptGenerator.generateFromYouTube(videoUrl, video.title);
 
           // Cache the result
           await transcriptGenerator.cacheTranscript(video.id, result);
+          console.log(`  ✓ Transcript saved to cache`);
         }
 
         if (result.fullText.trim().length > 0) {
           transcripts.push(result.fullText);
           successCount++;
-          console.log(`✓ Transcript generated for: ${video.title} (${result.duration.toFixed(1)}s, ${result.fullText.length} chars)`);
+          console.log(`  ✓ Success: ${result.duration.toFixed(1)}s duration, ${result.fullText.split(' ').length} words`);
         } else {
           failCount++;
-          console.log(`✗ Empty transcript for: ${video.title}`);
+          console.log(`  ✗ Empty transcript`);
         }
       } catch (error) {
         failCount++;
-        console.log(`✗ Failed to generate transcript for: ${video.title}`, error);
+        console.log(`  ✗ Failed:`, error instanceof Error ? error.message : error);
       }
     }
 
-    console.log(
-      `Transcripts: ${successCount} successful, ${failCount} failed`
-    );
+    console.log(`\nTranscription Summary:`);
+    console.log(`  ✓ Successful: ${successCount}`);
+    console.log(`  ✗ Failed: ${failCount}`);
+    console.log(`  → Total transcripts: ${transcripts.length}`);
 
     if (transcripts.length === 0) {
       return NextResponse.json(

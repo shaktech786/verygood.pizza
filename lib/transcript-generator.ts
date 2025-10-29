@@ -22,40 +22,56 @@ export interface TranscriptResult {
   fullText: string;
   segments: TranscriptSegment[];
   duration: number;
+  videoId?: string;
+  videoTitle?: string;
+  videoUrl?: string;
 }
 
 export class TranscriptGenerator {
   private deepgram;
-  private tempDir: string;
+  private storageDir: string;
+  private videoDir: string;
+  private transcriptDir: string;
 
-  constructor(apiKey: string, tempDir: string = './temp/transcripts') {
+  constructor(apiKey: string, storageDir: string = './storage') {
     this.deepgram = createClient(apiKey);
-    this.tempDir = tempDir;
+    this.storageDir = storageDir;
+    this.videoDir = path.join(storageDir, 'videos');
+    this.transcriptDir = path.join(storageDir, 'transcripts');
   }
 
   /**
    * Generate transcript from YouTube video URL
    */
-  async generateFromYouTube(videoUrl: string): Promise<TranscriptResult> {
+  async generateFromYouTube(videoUrl: string, videoTitle?: string): Promise<TranscriptResult> {
     console.log(`Generating transcript for: ${videoUrl}`);
 
     try {
-      // Ensure temp directory exists
-      await fs.mkdir(this.tempDir, { recursive: true });
+      // Ensure storage directories exist
+      await fs.mkdir(this.videoDir, { recursive: true });
+      await fs.mkdir(this.transcriptDir, { recursive: true });
 
-      // Download video
+      const videoId = this.extractVideoId(videoUrl);
+
+      // Download video (stored permanently)
       const videoPath = await this.downloadVideo(videoUrl);
 
-      // Extract audio
+      // Extract audio (temporary - will be deleted after transcription)
       const audioPath = await this.extractAudio(videoPath);
 
       // Transcribe audio
       const transcript = await this.transcribeAudio(audioPath);
 
-      // Clean up temporary files
-      await this.cleanup(videoPath, audioPath);
+      // Clean up only the audio file (keep video)
+      await this.cleanupAudio(audioPath);
 
-      return transcript;
+      // Add metadata to transcript
+      return {
+        ...transcript,
+        videoId,
+        videoTitle,
+        videoUrl,
+      };
     } catch (error) {
       console.error('Error generating transcript:', error);
       throw error;
@@ -67,7 +83,7 @@ export class TranscriptGenerator {
    */
   private async downloadVideo(videoUrl: string): Promise<string> {
     const videoId = this.extractVideoId(videoUrl);
-    const outputPath = path.join(this.tempDir, `${videoId}.mp4`);
+    const outputPath = path.join(this.videoDir, `${videoId}.mp4`);
 
     // Check if video already exists
     try {
@@ -78,11 +94,12 @@ export class TranscriptGenerator {
       // Video doesn't exist, download it
     }
 
-    // Download using yt-dlp (best quality audio/video)
-    const command = `yt-dlp -f "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best" -o "${outputPath}" "${videoUrl}"`;
+    // Download using yt-dlp with fallback formats to handle YouTube restrictions
+    // Using more flexible format selection to avoid SABR-only errors
+    const command = `yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b" --merge-output-format mp4 -o "${outputPath}" "${videoUrl}"`;
 
     console.log(`Downloading video from ${videoUrl}...`);
-    await execAsync(command, { maxBuffer: 1024 * 1024 * 50 }); // 50MB buffer
+    await execAsync(command, { maxBuffer: 1024 * 1024 * 100 }); // 100MB buffer
 
     return outputPath;
   }
@@ -188,15 +205,14 @@ export class TranscriptGenerator {
   }
 
   /**
-   * Clean up temporary files
+   * Clean up temporary audio file (keep video permanently)
    */
-  private async cleanup(videoPath: string, audioPath: string): Promise<void> {
+  private async cleanupAudio(audioPath: string): Promise<void> {
     try {
-      await fs.unlink(videoPath);
       await fs.unlink(audioPath);
-      console.log('Cleaned up temporary files');
+      console.log('Cleaned up temporary audio file');
     } catch (error) {
-      console.error('Error cleaning up temporary files:', error);
+      console.error('Error cleaning up audio file:', error);
     }
   }
 
@@ -204,7 +220,7 @@ export class TranscriptGenerator {
    * Get transcript from cache if available
    */
   async getCachedTranscript(videoId: string): Promise<TranscriptResult | null> {
-    const cachePath = path.join(this.tempDir, `${videoId}_transcript.json`);
+    const cachePath = path.join(this.transcriptDir, `${videoId}.json`);
 
     try {
       const data = await fs.readFile(cachePath, 'utf-8');
@@ -218,9 +234,23 @@ export class TranscriptGenerator {
    * Save transcript to cache
    */
   async cacheTranscript(videoId: string, transcript: TranscriptResult): Promise<void> {
-    const cachePath = path.join(this.tempDir, `${videoId}_transcript.json`);
+    const cachePath = path.join(this.transcriptDir, `${videoId}.json`);
 
-    await fs.mkdir(this.tempDir, { recursive: true });
+    await fs.mkdir(this.transcriptDir, { recursive: true });
     await fs.writeFile(cachePath, JSON.stringify(transcript, null, 2));
+  }
+
+  /**
+   * Get all cached transcript IDs
+   */
+  async getAllCachedTranscripts(): Promise<string[]> {
+    try {
+      const files = await fs.readdir(this.transcriptDir);
+      return files
+        .filter(f => f.endsWith('.json'))
+        .map(f => f.replace('.json', ''));
+    } catch {
+      return [];
+    }
   }
 }

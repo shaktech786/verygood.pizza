@@ -44,8 +44,12 @@ next-env.d.ts
 # Phrase analysis cache
 /data/phrases-cache.json
 
-# Transcript generation cache
+# Transcript generation cache (temp)
 /temp/transcripts
+
+# Permanent storage (not committed to repo)
+/storage/videos
+/storage/transcripts
 
 # Playwright MCP screenshots
 .playwright-mcp
