@@ -50,7 +50,7 @@ export function extractCommonPhrases(
   // Filter out stop words and short words
   const filteredTokens = tokens.filter(
     token =>
-      token.length > 2 &&
+      token.length > 1 && // Lowered from 2 to allow more words
       !stopwords.includes(token) &&
       /^[a-z]+$/.test(token) // Only alphabetic characters
   );
@@ -111,7 +111,7 @@ export function extractCommonWords(
   // Count word occurrences (excluding stop words)
   tokens.forEach(token => {
     if (
-      token.length > 3 &&
+      token.length > 2 && // Lowered from 3 to allow more words
       !stopwords.includes(token) &&
       /^[a-z]+$/.test(token)
     ) {

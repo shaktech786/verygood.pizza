@@ -48,10 +48,20 @@ export async function POST(request: Request) {
     for (const video of videos) {
       try {
         const transcript = await fetchVideoTranscript(video.id);
+        console.log(`Debug: Raw transcript length for ${video.id}:`, transcript.length);
+        if (transcript.length > 0) {
+          console.log(`Debug: First transcript item:`, transcript[0]);
+        }
         const fullText = transcript.map(item => item.text).join(' ');
-        transcripts.push(fullText);
-        successCount++;
-        console.log(`✓ Transcript fetched for: ${video.title}`);
+        console.log(`Debug: Mapped text length: ${fullText.length}`);
+        if (fullText.trim().length > 0) {
+          transcripts.push(fullText);
+          successCount++;
+          console.log(`✓ Transcript fetched for: ${video.title}`);
+        } else {
+          failCount++;
+          console.log(`✗ Empty transcript for: ${video.title}`);
+        }
       } catch (error) {
         failCount++;
         console.log(`✗ No transcript for: ${video.title}`);
@@ -69,21 +79,27 @@ export async function POST(request: Request) {
       );
     }
 
+    // Debug: Check transcript data
+    console.log(`Total transcript count: ${transcripts.length}`);
+    transcripts.forEach((t, i) => {
+      console.log(`Transcript ${i + 1}: ${t.length} characters, first 50 chars: "${t.substring(0, 50)}"`);
+    });
+
     // Step 4: Analyze phrases
     console.log('Analyzing phrases...');
     const phraseAnalysis = extractCommonPhrases(transcripts, {
       minPhraseLength: 2,
       maxPhraseLength: 5,
-      minOccurrences: 3,
+      minOccurrences: 2, // Lowered from 3 for shorter content
       topN: 50,
     });
 
     const topWords = extractCommonWords(transcripts, {
-      minOccurrences: 5,
+      minOccurrences: 3, // Lowered from 5 for shorter content
       topN: 30,
     });
 
-    const catchphrases = extractCatchphrases(transcripts, 5);
+    const catchphrases = extractCatchphrases(transcripts, 3); // Lowered from 5
 
     // Step 5: Save to cache
     const cacheData = {

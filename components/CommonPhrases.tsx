@@ -48,15 +48,22 @@ export function CommonPhrases() {
     );
   }
 
-  if (!data || data.videosAnalyzed === 0) {
+  if (!data || data.videosAnalyzed === 0 || (data.topPhrases.length === 0 && data.topWords.length === 0 && data.catchphrases.length === 0)) {
     return (
       <div className="text-center py-12 bg-black/60 backdrop-blur-md neon-border" style={{borderColor: 'var(--neon-pink)'}}>
-        <p className="text-lg font-bold uppercase" style={{color: 'var(--neon-yellow)'}}>
-          No phrase data available yet
+        <p className="text-lg font-bold uppercase mb-4" style={{color: 'var(--neon-yellow)'}}>
+          🎤 GATHERING VOICE DATA...
         </p>
-        <p className="text-sm text-gray-400 mt-2">
-          Come back soon to see the most common phrases!
-        </p>
+        <div className="max-w-2xl mx-auto text-left space-y-3 text-gray-300">
+          <p>The phrase analysis feature is ready, but we need videos with transcripts/captions to analyze!</p>
+          <p className="text-sm">📹 <strong>For streamers:</strong> Enable auto-generated captions on your YouTube videos to unlock this feature.</p>
+          <p className="text-sm">🔄 The system checks for new content weekly and will automatically display your signature phrases once transcripts are available.</p>
+          {data.videosAnalyzed > 0 && (
+            <p className="text-sm text-gray-400 mt-4">
+              ({data.videosAnalyzed} videos checked, transcripts not available or disabled)
+            </p>
+          )}
+        </div>
       </div>
     );
   }
