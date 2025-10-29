@@ -58,7 +58,7 @@ export function CommonPhrases() {
           <p>The phrase analysis feature is ready, but we need videos with transcripts/captions to analyze!</p>
           <p className="text-sm">📹 <strong>For streamers:</strong> Enable auto-generated captions on your YouTube videos to unlock this feature.</p>
           <p className="text-sm">🔄 The system checks for new content weekly and will automatically display your signature phrases once transcripts are available.</p>
-          {data.videosAnalyzed > 0 && (
+          {data && data.videosAnalyzed > 0 && (
             <p className="text-sm text-gray-400 mt-4">
               ({data.videosAnalyzed} videos checked, transcripts not available or disabled)
             </p>

@@ -43,3 +43,6 @@ next-env.d.ts
 
 # Phrase analysis cache
 /data/phrases-cache.json
+
+# Transcript generation cache
+/temp/transcripts

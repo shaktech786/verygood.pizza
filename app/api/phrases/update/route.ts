@@ -3,7 +3,6 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import {
   fetchChannelVideos,
-  fetchVideoTranscript,
   getChannelIdFromHandle,
 } from '@/lib/youtube';
 import {
@@ -11,6 +10,7 @@ import {
   extractCommonWords,
   extractCatchphrases,
 } from '@/lib/phrase-analysis';
+import { TranscriptGenerator } from '@/lib/transcript-generator';
 
 const CACHE_FILE = path.join(process.cwd(), 'data', 'phrases-cache.json');
 const CHANNEL_HANDLE = '@verygoodpizzaofficial';
@@ -32,6 +32,15 @@ export async function POST(request: Request) {
 
     console.log('Starting phrase analysis update...');
 
+    // Verify Deepgram API key
+    const deepgramApiKey = process.env.DEEPGRAM_API_KEY;
+    if (!deepgramApiKey) {
+      return NextResponse.json(
+        { error: 'DEEPGRAM_API_KEY is not configured' },
+        { status: 500 }
+      );
+    }
+
     // Step 1: Get channel ID from handle
     const channelId = await getChannelIdFromHandle(CHANNEL_HANDLE);
     console.log(`Found channel ID: ${channelId}`);
@@ -40,31 +49,46 @@ export async function POST(request: Request) {
     const videos = await fetchChannelVideos(channelId);
     console.log(`Found ${videos.length} videos`);
 
-    // Step 3: Fetch transcripts for all videos (with error handling)
+    // Step 3: Generate transcripts using Deepgram
+    const transcriptGenerator = new TranscriptGenerator(deepgramApiKey);
     const transcripts: string[] = [];
     let successCount = 0;
     let failCount = 0;
 
-    for (const video of videos) {
+    // Limit to 5 most recent videos to avoid long processing times
+    const videosToProcess = videos.slice(0, 5);
+
+    for (const video of videosToProcess) {
       try {
-        const transcript = await fetchVideoTranscript(video.id);
-        console.log(`Debug: Raw transcript length for ${video.id}:`, transcript.length);
-        if (transcript.length > 0) {
-          console.log(`Debug: First transcript item:`, transcript[0]);
+        console.log(`Processing video: ${video.title} (${video.id})`);
+
+        // Check cache first
+        const cached = await transcriptGenerator.getCachedTranscript(video.id);
+        let result;
+
+        if (cached) {
+          console.log(`Using cached transcript for ${video.id}`);
+          result = cached;
+        } else {
+          // Generate new transcript
+          const videoUrl = `https://www.youtube.com/watch?v=${video.id}`;
+          result = await transcriptGenerator.generateFromYouTube(videoUrl);
+
+          // Cache the result
+          await transcriptGenerator.cacheTranscript(video.id, result);
         }
-        const fullText = transcript.map(item => item.text).join(' ');
-        console.log(`Debug: Mapped text length: ${fullText.length}`);
-        if (fullText.trim().length > 0) {
-          transcripts.push(fullText);
+
+        if (result.fullText.trim().length > 0) {
+          transcripts.push(result.fullText);
           successCount++;
-          console.log(`✓ Transcript fetched for: ${video.title}`);
+          console.log(`✓ Transcript generated for: ${video.title} (${result.duration.toFixed(1)}s, ${result.fullText.length} chars)`);
         } else {
           failCount++;
           console.log(`✗ Empty transcript for: ${video.title}`);
         }
       } catch (error) {
         failCount++;
-        console.log(`✗ No transcript for: ${video.title}`);
+        console.log(`✗ Failed to generate transcript for: ${video.title}`, error);
       }
     }
 
@@ -79,11 +103,7 @@ export async function POST(request: Request) {
       );
     }
 
-    // Debug: Check transcript data
-    console.log(`Total transcript count: ${transcripts.length}`);
-    transcripts.forEach((t, i) => {
-      console.log(`Transcript ${i + 1}: ${t.length} characters, first 50 chars: "${t.substring(0, 50)}"`);
-    });
+    console.log(`Total transcripts for analysis: ${transcripts.length}`);
 
     // Step 4: Analyze phrases
     console.log('Analyzing phrases...');
