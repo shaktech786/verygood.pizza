@@ -46,3 +46,6 @@ next-env.d.ts
 
 # Transcript generation cache
 /temp/transcripts
+
+# Playwright MCP screenshots
+.playwright-mcp
