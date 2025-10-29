@@ -30,9 +30,17 @@ export function CommonPhrases() {
     try {
       const response = await fetch('/api/phrases');
       const result = await response.json();
-      setData(result);
+
+      // Handle error responses from API
+      if (result.error || !result.topPhrases) {
+        console.error('API error:', result.error);
+        setData(null);
+      } else {
+        setData(result);
+      }
     } catch (error) {
       console.error('Failed to fetch phrases:', error);
+      setData(null);
     } finally {
       setLoading(false);
     }
@@ -48,7 +56,7 @@ export function CommonPhrases() {
     );
   }
 
-  if (!data || data.videosAnalyzed === 0 || (data.topPhrases.length === 0 && data.topWords.length === 0 && data.catchphrases.length === 0)) {
+  if (!data || data.videosAnalyzed === 0 || (data.topPhrases?.length === 0 && data.topWords?.length === 0 && data.catchphrases?.length === 0)) {
     return (
       <div className="text-center py-12 bg-black/60 backdrop-blur-md neon-border" style={{borderColor: 'var(--neon-pink)'}}>
         <p className="text-lg font-bold uppercase mb-4" style={{color: 'var(--neon-yellow)'}}>
@@ -137,7 +145,7 @@ export function CommonPhrases() {
 
       {/* Phrases Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {currentData.slice(0, 15).map((item, index) => (
+        {currentData?.slice(0, 15).map((item, index) => (
           <div
             key={item.phrase}
             className="bg-black/60 backdrop-blur-md neon-border p-6 hover-glow transition-all duration-300"
@@ -189,7 +197,7 @@ export function CommonPhrases() {
         </div>
         <div className="bg-black/60 backdrop-blur-md neon-border p-6 text-center" style={{borderColor: 'var(--neon-green)'}}>
           <div className="text-4xl font-black neon-glow mb-2" style={{color: 'var(--neon-green)'}}>
-            {data.catchphrases.length}
+            {data.catchphrases?.length || 0}
           </div>
           <div className="text-sm font-bold uppercase tracking-wider text-gray-300">
             Unique Catchphrases
