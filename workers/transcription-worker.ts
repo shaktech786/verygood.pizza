@@ -110,7 +110,7 @@ transcriptionWorker.on('failed', (job: Job | undefined, error: Error) => {
   }
 });
 
-transcriptionWorker.on('progress', (job: Job, progress: number | object) => {
+transcriptionWorker.on('progress', (job, progress) => {
   if (typeof progress === 'number') {
     console.log(`   Progress: ${progress}%`);
   }

@@ -30,16 +30,12 @@ export function CommonPhrases() {
     try {
       const response = await fetch('/api/phrases');
       const result = await response.json();
-
-      // Handle error responses from API
       if (result.error || !result.topPhrases) {
-        console.error('API error:', result.error);
         setData(null);
       } else {
         setData(result);
       }
-    } catch (error) {
-      console.error('Failed to fetch phrases:', error);
+    } catch {
       setData(null);
     } finally {
       setLoading(false);
@@ -48,30 +44,19 @@ export function CommonPhrases() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center py-12">
-        <div className="animate-pulse text-xl font-bold uppercase tracking-wider neon-glow" style={{color: 'var(--neon-cyan)'}}>
-          Loading Phrases...
-        </div>
+      <div className="text-center py-12">
+        <p className="text-muted">Loading phrases...</p>
       </div>
     );
   }
 
   if (!data || data.videosAnalyzed === 0 || (data.topPhrases?.length === 0 && data.topWords?.length === 0 && data.catchphrases?.length === 0)) {
     return (
-      <div className="text-center py-12 bg-black/60 backdrop-blur-md neon-border" style={{borderColor: 'var(--neon-pink)'}}>
-        <p className="text-lg font-bold uppercase mb-4" style={{color: 'var(--neon-yellow)'}}>
-          🎤 GATHERING VOICE DATA...
+      <div className="pizza-box p-6 max-w-xl mx-auto text-center">
+        <p className="font-bold mb-2">Gathering Voice Data...</p>
+        <p className="text-sm text-muted m-0">
+          Phrase analysis will appear here once we have video transcripts to analyze.
         </p>
-        <div className="max-w-2xl mx-auto text-left space-y-3 text-gray-300">
-          <p>The phrase analysis feature is ready, but we need videos with transcripts/captions to analyze!</p>
-          <p className="text-sm">📹 <strong>For streamers:</strong> Enable auto-generated captions on your YouTube videos to unlock this feature.</p>
-          <p className="text-sm">🔄 The system checks for new content weekly and will automatically display your signature phrases once transcripts are available.</p>
-          {data && data.videosAnalyzed > 0 && (
-            <p className="text-sm text-gray-400 mt-4">
-              ({data.videosAnalyzed} videos checked, transcripts not available or disabled)
-            </p>
-          )}
-        </div>
       </div>
     );
   }
@@ -81,127 +66,64 @@ export function CommonPhrases() {
                      data.catchphrases;
 
   return (
-    <div className="w-full">
+    <div>
       {/* Header */}
       <div className="text-center mb-8">
-        <h2 className="text-4xl md:text-5xl font-black uppercase mb-4 neon-glow" style={{
-          color: 'var(--neon-cyan)',
-          textShadow: '0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan)'
-        }}>
-          VGP SIGNATURE PHRASES
+        <h2 id="phrases-heading" className="text-2xl font-bold mb-1">
+          Signature Phrases
         </h2>
-        <p className="text-lg font-bold uppercase tracking-wider" style={{color: 'var(--neon-green)'}}>
-          Analyzed from {data.videosAnalyzed} videos
+        <p className="text-sm text-muted">
+          From {data.videosAnalyzed} videos
+          {data.lastUpdated && ` · Updated ${new Date(data.lastUpdated).toLocaleDateString()}`}
         </p>
-        {data.lastUpdated && (
-          <p className="text-sm text-gray-400 mt-2">
-            Last updated: {new Date(data.lastUpdated).toLocaleDateString()}
-          </p>
-        )}
       </div>
 
-      {/* Tab Navigation */}
-      <div className="flex justify-center gap-4 mb-8 flex-wrap">
-        <button
-          onClick={() => setActiveTab('catchphrases')}
-          className={`px-6 py-3 font-black text-sm uppercase tracking-wider transition-all duration-300 neon-border ${
-            activeTab === 'catchphrases' ? 'pulse-glow' : ''
-          }`}
-          style={{
-            borderColor: activeTab === 'catchphrases' ? 'var(--neon-pink)' : 'var(--neon-cyan)',
-            color: activeTab === 'catchphrases' ? 'var(--neon-pink)' : 'var(--neon-cyan)',
-            background: activeTab === 'catchphrases' ? 'rgba(255, 0, 255, 0.1)' : 'transparent'
-          }}
-        >
-          Catchphrases
-        </button>
-        <button
-          onClick={() => setActiveTab('phrases')}
-          className={`px-6 py-3 font-black text-sm uppercase tracking-wider transition-all duration-300 neon-border ${
-            activeTab === 'phrases' ? 'pulse-glow' : ''
-          }`}
-          style={{
-            borderColor: activeTab === 'phrases' ? 'var(--neon-pink)' : 'var(--neon-cyan)',
-            color: activeTab === 'phrases' ? 'var(--neon-pink)' : 'var(--neon-cyan)',
-            background: activeTab === 'phrases' ? 'rgba(255, 0, 255, 0.1)' : 'transparent'
-          }}
-        >
-          Common Phrases
-        </button>
-        <button
-          onClick={() => setActiveTab('words')}
-          className={`px-6 py-3 font-black text-sm uppercase tracking-wider transition-all duration-300 neon-border ${
-            activeTab === 'words' ? 'pulse-glow' : ''
-          }`}
-          style={{
-            borderColor: activeTab === 'words' ? 'var(--neon-pink)' : 'var(--neon-cyan)',
-            color: activeTab === 'words' ? 'var(--neon-pink)' : 'var(--neon-cyan)',
-            background: activeTab === 'words' ? 'rgba(255, 0, 255, 0.1)' : 'transparent'
-          }}
-        >
-          Top Words
-        </button>
+      {/* Tabs */}
+      <div className="flex justify-center gap-2 mb-8 flex-wrap">
+        {(['catchphrases', 'phrases', 'words'] as const).map((tab) => (
+          <button
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`tab-pill ${activeTab === tab ? 'active' : ''}`}
+          >
+            {tab === 'catchphrases' ? 'Catchphrases' : tab === 'phrases' ? 'Phrases' : 'Words'}
+          </button>
+        ))}
       </div>
 
       {/* Phrases Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {currentData?.slice(0, 15).map((item, index) => (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mb-10">
+        {currentData?.slice(0, 12).map((item, index) => (
           <div
             key={item.phrase}
-            className="bg-black/60 backdrop-blur-md neon-border p-6 hover-glow transition-all duration-300"
-            style={{
-              borderColor: index < 3 ? 'var(--neon-pink)' :
-                          index < 6 ? 'var(--neon-cyan)' :
-                          'var(--neon-green)'
-            }}
+            className={`phrase-card ${index < 3 ? 'top-3' : ''}`}
           >
-            <div className="flex items-start justify-between mb-2">
-              <span className="text-2xl font-black neon-glow" style={{
-                color: index < 3 ? 'var(--neon-pink)' :
-                       index < 6 ? 'var(--neon-cyan)' :
-                       'var(--neon-green)'
-              }}>
+            <div className="flex items-baseline justify-between gap-4">
+              <span className={`text-sm font-black ${index < 3 ? 'text-red' : 'text-muted'}`}>
                 #{index + 1}
               </span>
-              <span className="text-sm font-bold px-3 py-1 rounded-full neon-border" style={{
-                borderColor: 'var(--neon-yellow)',
-                color: 'var(--neon-yellow)'
-              }}>
-                {item.count}×
-              </span>
+              <span className="text-xs text-muted">{item.count}×</span>
             </div>
-            <p className="text-lg font-bold uppercase tracking-wide text-gray-100">
+            <p className="text-sm font-medium mt-1 m-0">
               &quot;{item.phrase}&quot;
             </p>
           </div>
         ))}
       </div>
 
-      {/* Stats Footer */}
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-black/60 backdrop-blur-md neon-border p-6 text-center" style={{borderColor: 'var(--neon-pink)'}}>
-          <div className="text-4xl font-black neon-glow mb-2" style={{color: 'var(--neon-pink)'}}>
-            {data.videosAnalyzed}
-          </div>
-          <div className="text-sm font-bold uppercase tracking-wider text-gray-300">
-            Videos Analyzed
-          </div>
+      {/* Stats */}
+      <div className="pizza-box grid grid-cols-3">
+        <div className="stat-block border-r border-[var(--border)]">
+          <div className="stat-number">{data.videosAnalyzed}</div>
+          <div className="stat-label">Videos</div>
         </div>
-        <div className="bg-black/60 backdrop-blur-md neon-border p-6 text-center" style={{borderColor: 'var(--neon-cyan)'}}>
-          <div className="text-4xl font-black neon-glow mb-2" style={{color: 'var(--neon-cyan)'}}>
-            {data.totalWords.toLocaleString()}
-          </div>
-          <div className="text-sm font-bold uppercase tracking-wider text-gray-300">
-            Words Analyzed
-          </div>
+        <div className="stat-block border-r border-[var(--border)]">
+          <div className="stat-number">{(data.totalWords / 1000).toFixed(0)}k</div>
+          <div className="stat-label">Words</div>
         </div>
-        <div className="bg-black/60 backdrop-blur-md neon-border p-6 text-center" style={{borderColor: 'var(--neon-green)'}}>
-          <div className="text-4xl font-black neon-glow mb-2" style={{color: 'var(--neon-green)'}}>
-            {data.catchphrases?.length || 0}
-          </div>
-          <div className="text-sm font-bold uppercase tracking-wider text-gray-300">
-            Unique Catchphrases
-          </div>
+        <div className="stat-block">
+          <div className="stat-number">{data.catchphrases?.length || 0}</div>
+          <div className="stat-label">Catchphrases</div>
         </div>
       </div>
     </div>

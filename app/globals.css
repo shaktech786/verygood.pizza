@@ -1,56 +1,41 @@
 @import "tailwindcss";
 
 /* ===========================
-   ACCESSIBILITY-FIRST DESIGN
+   VGP - PIZZA GAMING VIBES
+   Retro arcade meets pizza parlor
    =========================== */
 
 :root {
-  /* Core Colors - Gaming Vibrant Palette */
-  --background: #0a0118;
-  --foreground: #f0f0f0;
-  --primary: #ff00ff;
-  --secondary: #00ffff;
-  --accent: #ff3366;
+  /* Pizza Palette - warm, inviting, fun */
+  --pizza-red: #e63946;
+  --pizza-orange: #f4a261;
+  --pizza-yellow: #e9c46a;
+  --pizza-cream: #f8f4e3;
+  --pizza-brown: #6d4c41;
 
-  /* Gaming Colors */
-  --neon-pink: #ff00ff;
-  --neon-cyan: #00ffff;
-  --neon-green: #00ff88;
-  --neon-yellow: #ffff00;
-  --neon-orange: #ff6600;
-  --purple-dark: #1a0033;
-  --purple-mid: #4a0080;
-  --purple-light: #8000ff;
+  /* Arcade Accents */
+  --arcade-blue: #457b9d;
+  --arcade-dark: #1d3557;
+  --arcade-glow: #a8dadc;
 
-  /* Semantic Colors */
-  --success: #059669;
-  --warning: #d97706;
-  --error: #dc2626;
-  --info: #0284c7;
+  /* Core */
+  --background: #0d1117;
+  --background-warm: #1a1612;
+  --foreground: #f8f4e3;
+  --foreground-muted: #a89f91;
 
-  /* Neutral Scale */
-  --gray-50: #fafafa;
-  --gray-100: #f5f5f5;
-  --gray-200: #e5e5e5;
-  --gray-300: #d4d4d4;
-  --gray-400: #a3a3a3;
-  --gray-500: #737373;
-  --gray-600: #525252;
-  --gray-700: #404040;
-  --gray-800: #262626;
-  --gray-900: #171717;
+  /* Functional */
+  --live: #22c55e;
+  --offline: #6b7280;
 
-  /* Spacing Scale for Consistency */
-  --spacing-unit: 0.5rem;
+  /* Surface */
+  --surface: rgba(248, 244, 227, 0.03);
+  --surface-hover: rgba(248, 244, 227, 0.06);
+  --border: rgba(248, 244, 227, 0.1);
 
-  /* Focus Ring for Keyboard Navigation */
-  --focus-ring: 3px solid var(--accent);
+  /* Focus */
+  --focus-ring: 2px solid var(--pizza-orange);
   --focus-offset: 2px;
-
-  /* Animation Speeds (respects prefers-reduced-motion) */
-  --transition-fast: 150ms;
-  --transition-base: 200ms;
-  --transition-slow: 300ms;
 }
 
 @theme inline {
@@ -60,40 +45,8 @@
   --font-mono: var(--font-geist-mono);
 }
 
-/* Light Mode - Gaming Style */
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #ffffff;
-    --foreground: #1a1a1a;
-    --primary: #8000ff;
-    --secondary: #00d4ff;
-    --accent: #ff3366;
-  }
-}
-
-/* High Contrast Mode Support */
-@media (prefers-contrast: high) {
-  :root {
-    --background: #ffffff;
-    --foreground: #000000;
-    --primary: #5b0099;
-    --secondary: #003580;
-    --accent: #b30000;
-  }
-}
-
-@media (prefers-color-scheme: dark) and (prefers-contrast: high) {
-  :root {
-    --background: #000000;
-    --foreground: #ffffff;
-    --primary: #c084fc;
-    --secondary: #93c5fd;
-    --accent: #fca5a5;
-  }
-}
-
 /* ===========================
-   GLOBAL STYLES
+   BASE
    =========================== */
 
 * {
@@ -102,129 +55,335 @@
 
 html {
   scroll-behavior: smooth;
-  font-size: 16px; /* Base font size for accessibility */
 }
 
-/* Respect reduced motion preference */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
   line-height: 1.6;
   margin: 0;
-  padding: 0;
   min-height: 100vh;
 }
 
-/* ===========================
-   FOCUS MANAGEMENT
-   =========================== */
-
-/* Remove default focus outline */
-*:focus {
-  outline: none;
+/* Checkerboard pattern - subtle pizza box vibe */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(45deg, rgba(248, 244, 227, 0.015) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(248, 244, 227, 0.015) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(248, 244, 227, 0.015) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(248, 244, 227, 0.015) 75%);
+  background-size: 40px 40px;
+  background-position: 0 0, 0 20px, 20px -20px, -20px 0px;
+  pointer-events: none;
+  z-index: 0;
 }
 
-/* Add highly visible focus ring for keyboard navigation */
+/* ===========================
+   FOCUS
+   =========================== */
+
+*:focus { outline: none; }
 *:focus-visible {
   outline: var(--focus-ring);
   outline-offset: var(--focus-offset);
-  border-radius: 0.25rem;
+  border-radius: 4px;
 }
 
-/* Special focus for buttons and links */
-a:focus-visible,
-button:focus-visible {
-  outline: var(--focus-ring);
-  outline-offset: var(--focus-offset);
-}
-
-/* Skip to main content link */
 .skip-link {
   position: absolute;
   top: -100px;
   left: 0;
-  background: var(--accent);
+  background: var(--pizza-red);
   color: white;
   padding: 1rem 2rem;
   text-decoration: none;
-  font-weight: bold;
+  font-weight: 700;
   z-index: 9999;
-  border-radius: 0 0 0.5rem 0;
 }
-
-.skip-link:focus {
-  top: 0;
-}
+.skip-link:focus { top: 0; }
 
 /* ===========================
    TYPOGRAPHY
    =========================== */
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: 700;
-  line-height: 1.2;
-  margin-top: 0;
-  margin-bottom: 1rem;
+h1, h2, h3 {
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 1rem;
 }
 
-h1 {
-  font-size: clamp(2rem, 5vw, 3.5rem);
+/* Chunky retro heading style */
+.heading-chunky {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
 }
 
-h2 {
-  font-size: clamp(1.5rem, 4vw, 2.5rem);
-}
-
-h3 {
-  font-size: clamp(1.25rem, 3vw, 2rem);
-}
-
-p {
-  margin-top: 0;
-  margin-bottom: 1rem;
-  max-width: 70ch; /* Optimal reading width */
+.heading-shadow {
+  text-shadow:
+    3px 3px 0 var(--pizza-red),
+    6px 6px 0 rgba(0,0,0,0.2);
 }
 
 /* ===========================
-   INTERACTIVE ELEMENTS
+   COMPONENTS
    =========================== */
 
-button, a {
-  cursor: pointer;
-  transition: all var(--transition-base) ease;
+/* Pizza box card */
+.pizza-box {
+  background: linear-gradient(135deg, #1a1612 0%, #0d1117 100%);
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
 }
 
-button:disabled {
-  cursor: not-allowed;
+.pizza-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--pizza-red), var(--pizza-orange), var(--pizza-yellow));
+}
+
+/* Arcade button */
+.btn-arcade {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2rem;
+  background: var(--pizza-red);
+  color: white;
+  font-weight: 800;
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  box-shadow:
+    0 4px 0 #b91c1c,
+    0 6px 10px rgba(0,0,0,0.3);
+}
+
+.btn-arcade:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 6px 0 #b91c1c,
+    0 10px 20px rgba(0,0,0,0.3);
+}
+
+.btn-arcade:active {
+  transform: translateY(2px);
+  box-shadow:
+    0 2px 0 #b91c1c,
+    0 4px 10px rgba(0,0,0,0.3);
+}
+
+/* Secondary button */
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: var(--foreground);
+  font-weight: 600;
+  border: 2px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  border-color: var(--pizza-orange);
+  color: var(--pizza-orange);
+}
+
+/* Status badges */
+.badge-live {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(34, 197, 94, 0.15);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 100px;
+  color: var(--live);
+  font-weight: 700;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.badge-offline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(107, 114, 128, 0.15);
+  border: 1px solid rgba(107, 114, 128, 0.3);
+  border-radius: 100px;
+  color: var(--offline);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* Live dot */
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--live);
+  border-radius: 50%;
+  animation: pulse-live 2s ease-in-out infinite;
+}
+
+@keyframes pulse-live {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Tab pills */
+.tab-pill {
+  padding: 0.625rem 1.25rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: var(--foreground-muted);
+  background: transparent;
+  border: 2px solid transparent;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.tab-pill:hover {
+  color: var(--foreground);
+  background: var(--surface);
+}
+
+.tab-pill.active {
+  color: var(--pizza-orange);
+  background: rgba(244, 162, 97, 0.1);
+  border-color: rgba(244, 162, 97, 0.3);
+}
+
+/* Stat block */
+.stat-block {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--pizza-orange);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--foreground-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Social link */
+.social-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.25rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--foreground-muted);
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.social-link:hover {
+  background: var(--surface-hover);
+  border-color: var(--pizza-orange);
+  color: var(--foreground);
+  transform: translateY(-2px);
+}
+
+.social-link span:first-child {
+  font-size: 1.75rem;
+}
+
+.social-link span:last-child {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Phrase card */
+.phrase-card {
+  padding: 1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--pizza-orange);
+  border-radius: 0 8px 8px 0;
+  transition: all 0.2s;
+}
+
+.phrase-card:hover {
+  background: var(--surface-hover);
+}
+
+.phrase-card.top-3 {
+  border-left-color: var(--pizza-red);
+  background: rgba(230, 57, 70, 0.05);
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 3rem 0;
+}
+
+/* Pizza slice decoration */
+.pizza-slice {
+  position: relative;
+}
+
+.pizza-slice::after {
+  content: '🍕';
+  position: absolute;
+  font-size: 1.5rem;
   opacity: 0.5;
 }
 
-/* Ensure sufficient touch targets (44x44px minimum) */
-button,
-a,
-input,
-select,
-textarea {
-  min-height: 44px;
-  min-width: 44px;
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
-/* ===========================
-   UTILITY CLASSES
-   =========================== */
-
+/* Visually hidden */
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -234,164 +393,16 @@ textarea {
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
-  border-width: 0;
-}
-
-.container {
-  width: 100%;
-  max-width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
-@media (min-width: 640px) {
-  .container {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+  border: 0;
 }
 
 /* ===========================
-   GAMING AESTHETICS
+   UTILITY
    =========================== */
 
-/* Neon Glow Effects */
-.neon-glow {
-  text-shadow:
-    0 0 10px currentColor,
-    0 0 20px currentColor,
-    0 0 30px currentColor,
-    0 0 40px currentColor;
-}
-
-.neon-border {
-  box-shadow:
-    0 0 5px currentColor,
-    0 0 10px currentColor,
-    0 0 15px currentColor,
-    inset 0 0 5px currentColor;
-  border: 2px solid currentColor;
-}
-
-/* Retro Scan Lines */
-@keyframes scanlines {
-  0% {
-    background-position: 0 0;
-  }
-  100% {
-    background-position: 0 100%;
-  }
-}
-
-.scanlines::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: repeating-linear-gradient(
-    0deg,
-    rgba(0, 0, 0, 0.15),
-    rgba(0, 0, 0, 0.15) 1px,
-    transparent 1px,
-    transparent 2px
-  );
-  pointer-events: none;
-  animation: scanlines 10s linear infinite;
-  opacity: 0.1;
-}
-
-/* Pixelated Border */
-.pixel-border {
-  image-rendering: pixelated;
-  border-image-slice: 3;
-  border-image-width: 3;
-  border-image-repeat: stretch;
-  border-style: solid;
-  border-width: 3px;
-}
-
-/* Gradient Backgrounds */
-.gradient-gaming {
-  background: linear-gradient(
-    135deg,
-    var(--purple-dark) 0%,
-    var(--purple-mid) 50%,
-    var(--neon-pink) 100%
-  );
-}
-
-.gradient-cyber {
-  background: linear-gradient(
-    to right,
-    var(--neon-cyan),
-    var(--neon-pink),
-    var(--neon-yellow)
-  );
-}
-
-/* Hover Glow Effect */
-.hover-glow {
-  transition: all 0.3s ease;
-}
-
-.hover-glow:hover {
-  filter: drop-shadow(0 0 10px currentColor)
-          drop-shadow(0 0 20px currentColor);
-  transform: scale(1.05);
-}
-
-/* Glitch Effect */
-@keyframes glitch {
-  0%, 100% {
-    transform: translate(0);
-  }
-  33% {
-    transform: translate(-2px, 2px);
-  }
-  66% {
-    transform: translate(2px, -2px);
-  }
-}
-
-.glitch:hover {
-  animation: glitch 0.3s infinite;
-}
-
-/* Floating Animation */
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.float-animation {
-  animation: float 3s ease-in-out infinite;
-}
-
-/* Pulse Glow */
-@keyframes pulseGlow {
-  0%, 100% {
-    box-shadow: 0 0 5px currentColor;
-  }
-  50% {
-    box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
-  }
-}
-
-.pulse-glow {
-  animation: pulseGlow 2s ease-in-out infinite;
-}
+.text-muted { color: var(--foreground-muted); }
+.text-orange { color: var(--pizza-orange); }
+.text-red { color: var(--pizza-red); }
+.text-center { text-align: center; }
+.font-bold { font-weight: 700; }
+.font-black { font-weight: 900; }
