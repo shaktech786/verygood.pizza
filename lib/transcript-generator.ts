@@ -16,15 +16,26 @@ export interface TranscriptSegment {
   start: number;
   end: number;
   confidence: number;
+  speaker?: number;
+}
+
+export interface SpeakerStats {
+  speaker: number;
+  wordCount: number;
+  duration: number;
+  percentage: number;
 }
 
 export interface TranscriptResult {
   fullText: string;
+  fullTextAllSpeakers?: string; // Unfiltered text with all speakers
   segments: TranscriptSegment[];
   duration: number;
   videoId?: string;
   videoTitle?: string;
   videoUrl?: string;
+  speakerStats?: SpeakerStats[];
+  primarySpeaker?: number;
 }
 
 export class TranscriptGenerator {
@@ -96,7 +107,8 @@ export class TranscriptGenerator {
 
     // Download using yt-dlp with fallback formats to handle YouTube restrictions
     // Using more flexible format selection to avoid SABR-only errors
-    const command = `yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b" --merge-output-format mp4 -o "${outputPath}" "${videoUrl}"`;
+    // Using --cookies-from-browser to bypass YouTube bot detection
+    const command = `yt-dlp -f "bv*[ext=mp4]+ba[ext=m4a]/b[ext=mp4]/bv*+ba/b" --merge-output-format mp4 --cookies-from-browser chrome -o "${outputPath}" "${videoUrl}"`;
 
     console.log(`Downloading video from ${videoUrl}...`);
     await execAsync(command, { maxBuffer: 1024 * 1024 * 100 }); // 100MB buffer
@@ -158,41 +170,115 @@ export class TranscriptGenerator {
     const channel = result.results.channels[0];
     const alternative = channel.alternatives[0];
 
-    // Build segments with timestamps
+    // Calculate speaker statistics
+    const speakerData = new Map<number, { wordCount: number; duration: number }>();
+
+    if (alternative.words) {
+      for (const word of alternative.words) {
+        const speaker = word.speaker ?? 0;
+        const data = speakerData.get(speaker) || { wordCount: 0, duration: 0 };
+        data.wordCount++;
+        data.duration += (word.end - word.start);
+        speakerData.set(speaker, data);
+      }
+    }
+
+    // Find primary speaker (most speaking time)
+    let primarySpeaker = 0;
+    let maxDuration = 0;
+    const totalDuration = result.metadata.duration || 0;
+
+    const speakerStats: SpeakerStats[] = [];
+    speakerData.forEach((data, speaker) => {
+      const stats: SpeakerStats = {
+        speaker,
+        wordCount: data.wordCount,
+        duration: data.duration,
+        percentage: totalDuration > 0 ? (data.duration / totalDuration) * 100 : 0,
+      };
+      speakerStats.push(stats);
+
+      if (data.duration > maxDuration) {
+        maxDuration = data.duration;
+        primarySpeaker = speaker;
+      }
+    });
+
+    console.log(`Detected ${speakerData.size} speakers. Primary speaker: ${primarySpeaker} (${maxDuration.toFixed(1)}s, ${speakerStats.find(s => s.speaker === primarySpeaker)?.percentage.toFixed(1)}%)`);
+
+    // Build segments with timestamps (filtered to primary speaker only)
     const segments: TranscriptSegment[] = [];
+    const allSegments: TranscriptSegment[] = [];
 
     if (alternative.words) {
       // Group words into segments (roughly every 30 seconds)
       let currentSegment: TranscriptSegment | null = null;
+      let currentAllSegment: TranscriptSegment | null = null;
       const segmentDuration = 30; // seconds
 
       for (const word of alternative.words) {
-        if (!currentSegment || word.start >= currentSegment.start + segmentDuration) {
-          if (currentSegment) {
-            segments.push(currentSegment);
+        const wordSpeaker = word.speaker ?? 0;
+
+        // Build all-speakers segments
+        if (!currentAllSegment || word.start >= currentAllSegment.start + segmentDuration) {
+          if (currentAllSegment) {
+            allSegments.push(currentAllSegment);
           }
-          currentSegment = {
+          currentAllSegment = {
             text: word.punctuated_word || word.word,
             start: word.start,
             end: word.end,
             confidence: word.confidence,
+            speaker: wordSpeaker,
           };
         } else {
-          currentSegment.text += ' ' + (word.punctuated_word || word.word);
-          currentSegment.end = word.end;
-          currentSegment.confidence = (currentSegment.confidence + word.confidence) / 2;
+          currentAllSegment.text += ' ' + (word.punctuated_word || word.word);
+          currentAllSegment.end = word.end;
+          currentAllSegment.confidence = (currentAllSegment.confidence + word.confidence) / 2;
+        }
+
+        // Build primary speaker segments (filtered)
+        if (wordSpeaker === primarySpeaker) {
+          if (!currentSegment || word.start >= currentSegment.start + segmentDuration) {
+            if (currentSegment) {
+              segments.push(currentSegment);
+            }
+            currentSegment = {
+              text: word.punctuated_word || word.word,
+              start: word.start,
+              end: word.end,
+              confidence: word.confidence,
+              speaker: wordSpeaker,
+            };
+          } else {
+            currentSegment.text += ' ' + (word.punctuated_word || word.word);
+            currentSegment.end = word.end;
+            currentSegment.confidence = (currentSegment.confidence + word.confidence) / 2;
+          }
         }
       }
 
       if (currentSegment) {
         segments.push(currentSegment);
       }
+      if (currentAllSegment) {
+        allSegments.push(currentAllSegment);
+      }
     }
 
+    // Build filtered full text (primary speaker only)
+    const fullText = segments.map(s => s.text).join(' ');
+    const fullTextAllSpeakers = alternative.transcript;
+
+    console.log(`Filtered transcript: ${alternative.words?.length || 0} total words -> ${fullText.split(' ').length} words from primary speaker`);
+
     return {
-      fullText: alternative.transcript,
+      fullText,
+      fullTextAllSpeakers,
       segments,
-      duration: result.metadata.duration || 0,
+      duration: totalDuration,
+      speakerStats: speakerStats.sort((a, b) => b.duration - a.duration),
+      primarySpeaker,
     };
   }
 

@@ -6,13 +6,20 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "workers": "tsx scripts/start-workers.ts",
+    "queue:status": "tsx scripts/queue-cli.ts status",
+    "queue:metrics": "tsx scripts/queue-cli.ts metrics",
+    "queue:clear": "tsx scripts/queue-cli.ts clear",
+    "queue:analyze": "tsx scripts/queue-cli.ts analyze"
   },
   "dependencies": {
     "@deepgram/sdk": "^4.11.2",
+    "bullmq": "^5.63.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.24",
+    "ioredis": "^5.8.2",
     "lucide-react": "^0.546.0",
     "natural": "^8.1.0",
     "next": "15.5.6",
@@ -31,6 +38,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.6",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }

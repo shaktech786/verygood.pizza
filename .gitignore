@@ -50,6 +50,7 @@ next-env.d.ts
 # Permanent storage (not committed to repo)
 /storage/videos
 /storage/transcripts
+/storage/transcripts-backup-no-speaker-filter
 
 # Playwright MCP screenshots
 .playwright-mcp

@@ -20,41 +20,49 @@ export interface TranscriptItem {
 }
 
 /**
- * Fetch videos from a YouTube channel using RSS feed (no API key required)
+ * Fetch videos from a YouTube channel using yt-dlp (no API key required)
+ * @param channelId - YouTube channel ID
+ * @param maxVideos - Maximum number of videos to fetch (default: 25)
  */
-export async function fetchChannelVideos(channelId: string): Promise<YouTubeVideo[]> {
+export async function fetchChannelVideos(channelId: string, maxVideos: number = 25): Promise<YouTubeVideo[]> {
   try {
-    // YouTube RSS feed endpoint
-    const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+    const { exec } = await import('child_process');
+    const { promisify } = await import('util');
+    const execAsync = promisify(exec);
 
-    const response = await fetch(rssUrl);
-    const xmlText = await response.text();
+    // Use yt-dlp to fetch video metadata without downloading
+    // --flat-playlist: Don't download, just list
+    // --print-json: Output JSON for each video
+    // --playlist-end: Limit number of videos
+    // Use /streams tab instead of /videos (which doesn't work for all channels)
+    const command = `yt-dlp --flat-playlist --print-json --playlist-end ${maxVideos} --cookies-from-browser chrome "https://www.youtube.com/@verygoodpizzaofficial/streams"`;
 
-    // Parse XML to extract video data
+    const { stdout } = await execAsync(command, { maxBuffer: 1024 * 1024 * 10 });
+
+    // Parse JSON lines (one video per line)
     const videos: YouTubeVideo[] = [];
-    const videoRegex = /<entry>([\s\S]*?)<\/entry>/g;
-    const matches = xmlText.matchAll(videoRegex);
+    const lines = stdout.trim().split('\n').filter(line => line.trim());
 
-    for (const match of matches) {
-      const entry = match[1];
+    for (const line of lines) {
+      try {
+        const data = JSON.parse(line);
 
-      const videoId = entry.match(/<yt:videoId>(.*?)<\/yt:videoId>/)?.[1];
-      const title = entry.match(/<title>(.*?)<\/title>/)?.[1];
-      const publishedAt = entry.match(/<published>(.*?)<\/published>/)?.[1];
-      const description = entry.match(/<media:description>(.*?)<\/media:description>/)?.[1];
-      const thumbnailUrl = entry.match(/<media:thumbnail url="(.*?)"/)?.[1];
-
-      if (videoId && title && publishedAt) {
         videos.push({
-          id: videoId,
-          title: decodeHtmlEntities(title),
-          description: decodeHtmlEntities(description || ''),
-          publishedAt,
-          thumbnailUrl: thumbnailUrl || `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+          id: data.id,
+          title: data.title,
+          description: data.description || '',
+          publishedAt: data.upload_date
+            ? `${data.upload_date.slice(0, 4)}-${data.upload_date.slice(4, 6)}-${data.upload_date.slice(6, 8)}`
+            : new Date().toISOString(),
+          thumbnailUrl: data.thumbnail || `https://i.ytimg.com/vi/${data.id}/hqdefault.jpg`,
+          duration: data.duration ? `${data.duration}` : undefined,
         });
+      } catch (parseError) {
+        console.error('Error parsing video JSON:', parseError);
       }
     }
 
+    console.log(`Fetched ${videos.length} videos from channel ${channelId}`);
     return videos;
   } catch (error) {
     console.error('Error fetching YouTube channel videos:', error);
