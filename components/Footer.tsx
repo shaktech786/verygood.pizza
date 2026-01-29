@@ -2,22 +2,18 @@
 
 import Image from 'next/image';
 
-export function Footer() {
-  const socials = [
-    { name: 'Discord', url: '/discord' },
-    { name: 'Twitch', url: 'https://twitch.tv/verygoodpizza' },
-    { name: 'YouTube', url: 'https://youtube.com/@verygoodpizzaofficial' },
-    { name: 'TikTok', url: 'https://tiktok.com/@verygood.pizza' },
-    { name: 'Instagram', url: 'https://instagram.com/verygoodpizzaofficial' },
-  ];
+const socials = [
+  { name: 'Discord', url: '/discord' },
+  { name: 'Twitch', url: 'https://twitch.tv/verygoodpizza' },
+  { name: 'YouTube', url: 'https://youtube.com/@verygoodpizzaofficial' },
+  { name: 'TikTok', url: 'https://tiktok.com/@verygood.pizza' },
+  { name: 'Instagram', url: 'https://instagram.com/verygoodpizzaofficial' },
+];
 
+export function Footer() {
   return (
-    <footer
-      className="border-t-2 border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 py-12 md:py-16"
-      role="contentinfo"
-    >
+    <footer className="border-t-2 py-12 md:py-16" style={{ borderColor: 'var(--border)' }} role="contentinfo">
       <div className="container mx-auto px-4">
-        {/* Main Footer Content */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
           {/* Brand */}
           <div>
@@ -28,25 +24,27 @@ export function Footer() {
                 width={64}
                 height={64}
                 className="h-16 w-auto"
+                style={{ imageRendering: 'pixelated' }}
                 aria-hidden="true"
               />
               <div>
-                <div className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-gray-100">
+                <div className="text-2xl md:text-3xl font-bold">
                   Very Good Pizza
                 </div>
-                <div className="text-purple-700 dark:text-purple-400 font-semibold">
+                <div className="text-orange font-semibold">
                   It&apos;s Gaming. Not DiGiorno.
                 </div>
               </div>
             </div>
-            <p className="text-gray-600 dark:text-gray-400 text-base md:text-lg leading-relaxed">
-              Nostalgia-fueled gaming, beatboxing, and community vibes. Built for retro lovers and good times.
+            <p className="text-muted text-base md:text-lg leading-relaxed">
+              Nostalgia-fueled gaming, beatboxing, and an open community.
+              Built for retro lovers and good times.
             </p>
           </div>
 
           {/* Social Links */}
           <div>
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            <h2 className="text-xl md:text-2xl font-bold mb-4">
               Follow Us
             </h2>
             <nav className="space-y-3" aria-label="Social media links">
@@ -56,10 +54,10 @@ export function Footer() {
                   href={social.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block text-base md:text-lg text-gray-700 dark:text-gray-300 hover:text-purple-700 dark:hover:text-purple-400 transition-colors focus:outline-none focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-red-600 rounded"
+                  className="block text-base md:text-lg text-muted hover:text-orange transition-colors focus:outline-none focus-visible:outline-[3px] focus-visible:outline-offset-2 focus-visible:outline-[var(--pizza-orange)] rounded"
                   aria-label={`Follow us on ${social.name} (opens in new tab)`}
                 >
-                  → {social.name}
+                  &rarr; {social.name}
                 </a>
               ))}
             </nav>
@@ -67,12 +65,12 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t-2 border-gray-200 dark:border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-600 dark:text-gray-400 text-sm md:text-base">
+        <div className="border-t-2 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-muted text-sm md:text-base" style={{ borderColor: 'var(--border)' }}>
           <div>
-            © {new Date().getFullYear()} Very Good Pizza. All rights reserved.
+            &copy; {new Date().getFullYear()} Very Good Pizza. All rights reserved.
           </div>
-          <div className="flex items-center gap-2">
-            Made with <span className="text-red-600" aria-label="love">❤️</span> for the community
+          <div>
+            Made with &hearts; for the community
           </div>
         </div>
       </div>

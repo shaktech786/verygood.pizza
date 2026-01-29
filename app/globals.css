@@ -363,16 +363,9 @@ h1, h2, h3 {
   margin: 3rem 0;
 }
 
-/* Pizza slice decoration */
-.pizza-slice {
-  position: relative;
-}
-
-.pizza-slice::after {
-  content: '🍕';
-  position: absolute;
-  font-size: 1.5rem;
-  opacity: 0.5;
+/* Discord-themed pizza box */
+.pizza-box-discord::before {
+  background: #5865F2;
 }
 
 /* Container */
