@@ -142,15 +142,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-
-      {/* Footer */}
-      <footer className="border-t border-[var(--border)] py-8">
-        <div className="container text-center">
-          <p className="text-sm text-muted m-0">
-            © {new Date().getFullYear()} Very Good Pizza · Made with 🍕
-          </p>
-        </div>
-      </footer>
     </div>
   );
 }
