@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export function Footer() {
   const socials = [
-    { name: 'Discord', url: 'https://discord.verygood.pizza' },
+    { name: 'Discord', url: '/discord' },
     { name: 'Twitch', url: 'https://twitch.tv/verygoodpizza' },
     { name: 'YouTube', url: 'https://youtube.com/@verygoodpizzaofficial' },
     { name: 'TikTok', url: 'https://tiktok.com/@verygood.pizza' },

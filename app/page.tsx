@@ -62,7 +62,7 @@ export default function Home() {
         {/* Discord Community Banner */}
         <section className="mb-16 max-w-2xl mx-auto" aria-labelledby="discord-heading">
           <a
-            href="https://discord.verygood.pizza"
+            href="/discord"
             target="_blank"
             rel="noopener noreferrer"
             className="block pizza-box p-6 md:p-8 text-center transition-transform hover:scale-[1.02] active:scale-[0.98]"
@@ -96,7 +96,7 @@ export default function Home() {
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3 max-w-3xl mx-auto">
             {[
               { name: 'Twitch', url: 'https://twitch.tv/verygoodpizza', icon: '🎮' },
-              { name: 'Discord', url: 'https://discord.verygood.pizza', icon: '💬' },
+              { name: 'Discord', url: '/discord', icon: '💬' },
               { name: 'TikTok', url: 'https://www.tiktok.com/@verygood.pizza', icon: '📱' },
               { name: 'Instagram', url: 'https://www.instagram.com/verygoodpizzaofficial', icon: '📸' },
               { name: 'Facebook', url: 'https://facebook.com/verygoodpizza', icon: '👍' },

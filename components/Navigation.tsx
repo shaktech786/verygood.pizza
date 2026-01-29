@@ -54,7 +54,7 @@ export function Navigation() {
             {/* Desktop */}
             <div className="hidden md:flex items-center gap-3">
               <a
-                href="https://discord.verygood.pizza"
+                href="/discord"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-arcade text-sm py-2 px-4"
@@ -105,7 +105,7 @@ export function Navigation() {
           >
             <div className="container flex flex-col gap-3">
               <a
-                href="https://discord.verygood.pizza"
+                href="/discord"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-arcade w-full justify-center"
