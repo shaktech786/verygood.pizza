@@ -118,22 +118,6 @@ export default function Home() {
           <CommonPhrases />
         </section>
 
-        <div className="divider" />
-
-        {/* Merch */}
-        <section className="text-center" aria-labelledby="merch-heading">
-          <h2 id="merch-heading" className="text-xl font-bold mb-6">
-            Official Merch
-          </h2>
-          <div className="pizza-box inline-block p-6">
-            <div className="w-32 h-32 flex items-center justify-center mb-3">
-              <span className="text-6xl">🧢</span>
-            </div>
-            <p className="text-sm text-muted m-0">
-              Coming soon via Limitlesswear
-            </p>
-          </div>
-        </section>
       </main>
     </div>
   );
