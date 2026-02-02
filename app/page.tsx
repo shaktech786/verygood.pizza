@@ -111,6 +111,80 @@ export default function Home() {
           </div>
         </section>
 
+        {/* SoundPad Pro */}
+        <section className="mb-16 max-w-2xl mx-auto" aria-labelledby="soundpad-heading">
+          <p className="text-sm font-bold text-center uppercase tracking-widest mb-4" style={{ color: '#8b5cf6' }}>
+            Free Download
+          </p>
+          <div className="soundpad-card p-6 md:p-8">
+            <span className="soundpad-badge">100% Free</span>
+            <div className="flex flex-col items-center gap-3 mb-2">
+              <div className="soundpad-logo-glow">
+                <Image
+                  src="/soundpad-pro-icon.png"
+                  alt="SoundPad Pro logo"
+                  width={80}
+                  height={80}
+                  className="w-18 h-18 md:w-20 md:h-20 rounded-2xl"
+                />
+              </div>
+              <h2 id="soundpad-heading" className="heading-chunky text-3xl md:text-4xl m-0" style={{ color: '#8b5cf6' }}>
+                SoundPad Pro
+              </h2>
+              <p className="text-sm text-center m-0" style={{ color: '#a78bfa' }}>
+                Built by VGP for the FGC community
+              </p>
+            </div>
+            <p className="text-muted text-base md:text-lg text-center mb-6 mt-4 leading-relaxed">
+              Turn your leverless or hitbox controller into a full soundboard for streams.
+              Map sounds to every button, trigger OBS scene switches, and control LiveSplit —
+              all from your fight stick.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
+              {[
+                { icon: '🎮', label: 'Gamepad Support' },
+                { icon: '🔊', label: 'Soundboard' },
+                { icon: '📡', label: 'OBS Integration' },
+                { icon: '⏱️', label: 'LiveSplit' },
+              ].map((feature) => (
+                <div key={feature.label} className="soundpad-feature">
+                  <span aria-hidden="true">{feature.icon}</span>
+                  <span>{feature.label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="https://github.com/shaktech786/soundpad-pro/releases/latest"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-arcade btn-arcade-purple soundpad-btn-glow"
+                aria-label="Download SoundPad Pro (opens GitHub releases in new tab)"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" />
+                </svg>
+                Download Free
+              </a>
+              <a
+                href="https://github.com/shaktech786/soundpad-pro"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-secondary btn-secondary-purple"
+                aria-label="View SoundPad Pro source code on GitHub (opens in new tab)"
+              >
+                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                Source Code
+              </a>
+            </div>
+            <p className="text-xs text-muted text-center mt-5 mb-0">
+              Open source &bull; Windows &bull; v2.11.0
+            </p>
+          </div>
+        </section>
+
         <div className="divider" />
 
         {/* Phrases Section */}
