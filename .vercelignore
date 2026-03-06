@@ -1,0 +1,9 @@
+node_modules
+.next
+storage
+logs
+temp
+.learning
+.playwright-mcp
+*.mp4
+*.mp4.part
