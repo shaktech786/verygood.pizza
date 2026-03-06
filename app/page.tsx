@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import { LiveStatus } from '@/components/LiveStatus';
 import { CommonPhrases } from '@/components/CommonPhrases';
-import { DiscordIcon } from '@/components/icons';
+import { DiscordIcon, YouTubeIcon } from '@/components/icons';
 
 export default function Home() {
   return (
@@ -81,14 +81,40 @@ export default function Home() {
           </a>
         </section>
 
+        {/* YouTube Channel Banner */}
+        <section className="mb-16 max-w-2xl mx-auto" aria-labelledby="youtube-heading">
+          <a
+            href="https://youtube.com/@verygoodpizzaofficial"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block pizza-box pizza-box-youtube p-6 md:p-8 text-center transition-transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <YouTubeIcon className="w-8 h-8 md:w-10 md:h-10" fill="#FF0000" />
+              <h2 id="youtube-heading" className="heading-chunky text-2xl md:text-3xl m-0">
+                Watch on YouTube
+              </h2>
+            </div>
+            <p className="text-muted text-base md:text-lg mb-4">
+              Stream highlights, beatbox sessions, retro gaming moments, and exclusive content.
+              Subscribe and never miss a slice.
+            </p>
+            <span className="btn-arcade inline-flex" style={{ background: '#FF0000', borderColor: '#CC0000' }}>
+              <YouTubeIcon className="w-5 h-5" />
+              Subscribe
+            </span>
+          </a>
+        </section>
+
         {/* Social Grid */}
         <section className="mb-16" aria-labelledby="social-heading">
           <h2 id="social-heading" className="text-xl font-bold text-center mb-6">
             Find Us Everywhere
           </h2>
-          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-7 gap-3 max-w-3xl mx-auto">
+          <div className="grid grid-cols-4 sm:grid-cols-4 md:grid-cols-8 gap-3 max-w-3xl mx-auto">
             {[
               { name: 'Twitch', url: 'https://twitch.tv/verygoodpizza', icon: '🎮' },
+              { name: 'YouTube', url: 'https://youtube.com/@verygoodpizzaofficial', icon: '▶️' },
               { name: 'Discord', url: '/discord', icon: '💬' },
               { name: 'TikTok', url: 'https://www.tiktok.com/@verygood.pizza', icon: '📱' },
               { name: 'Instagram', url: 'https://www.instagram.com/verygoodpizzaofficial', icon: '📸' },

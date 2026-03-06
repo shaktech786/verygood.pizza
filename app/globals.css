@@ -368,6 +368,19 @@ h1, h2, h3 {
   background: #5865F2;
 }
 
+/* YouTube-themed pizza box */
+.pizza-box-youtube::before {
+  background: #FF0000;
+}
+
+.pizza-box-youtube {
+  border-color: rgba(255, 0, 0, 0.2);
+}
+
+.pizza-box-youtube:hover {
+  border-color: rgba(255, 0, 0, 0.4);
+}
+
 /* SoundPad Pro card */
 .soundpad-card {
   position: relative;
