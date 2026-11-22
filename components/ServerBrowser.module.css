@@ -1,0 +1,137 @@
+.browser {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-3) var(--space-4);
+}
+
+.titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-block: var(--space-1);
+}
+
+.windowTitle {
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--sandbag);
+}
+
+.state {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--step--1);
+  color: var(--sandbag);
+}
+
+.state[data-state='live'] {
+  color: var(--sandbag);
+  font-weight: 700;
+}
+
+.dot {
+  width: 0.625rem;
+  height: 0.625rem;
+  border-radius: 50%;
+  background: var(--sandbag-dim);
+  opacity: 0.6;
+}
+
+.state[data-state='live'] .dot {
+  background: var(--pepperoni-hot);
+  opacity: 1;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgb(255 90 60 / 0.6);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 7px rgb(255 90 60 / 0);
+  }
+}
+
+.row {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+}
+
+.host {
+  font-family: var(--font-console);
+  font-size: var(--step-1);
+  color: var(--tracer);
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  margin: 0;
+}
+
+.stats dt {
+  font-size: var(--step--1);
+  color: var(--sandbag-dim);
+}
+
+.stats dd {
+  margin: 0;
+  font-weight: 700;
+}
+
+.streamTitle {
+  color: var(--sandbag);
+  font-size: var(--step--1);
+  overflow-wrap: anywhere;
+}
+
+.actions {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.connect,
+.secondary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid;
+  text-align: center;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.connect {
+  background: var(--pepperoni);
+  color: #fff;
+  font-size: var(--step-1);
+  border-color: #ff8a6e #5c150c #5c150c #ff8a6e;
+}
+
+.connect:hover {
+  background: #b02a18;
+}
+
+.connect:active,
+.secondary:active {
+  border-color: var(--bevel-lo) var(--bevel-hi) var(--bevel-hi) var(--bevel-lo);
+}
+
+.secondary {
+  background: var(--fatigue);
+  color: var(--sandbag);
+  border-color: var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi);
+}
+
+.secondary:hover {
+  background: var(--fatigue-deep);
+}

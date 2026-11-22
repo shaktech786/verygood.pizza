@@ -1,0 +1,124 @@
+.hero {
+  display: grid;
+  gap: var(--space-4);
+  padding-block: var(--space-6) var(--space-12);
+  position: relative;
+}
+
+.intro {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.wordmark {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: var(--step-hero);
+  line-height: 0.88;
+  text-transform: uppercase;
+  color: var(--sandbag);
+  max-width: 7ch;
+}
+
+.lede {
+  max-width: 40ch;
+  color: var(--sandbag-dim);
+}
+
+.server {
+  position: relative;
+  z-index: 1;
+}
+
+.mascot {
+  display: none;
+  image-rendering: pixelated;
+}
+
+.section {
+  display: grid;
+  gap: var(--space-6);
+  padding-block: var(--space-8);
+}
+
+.sectionHead {
+  display: grid;
+  gap: var(--space-2);
+  max-width: var(--measure);
+}
+
+.sectionHead p {
+  color: var(--sandbag-dim);
+}
+
+.youtube {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: var(--space-3) var(--space-4);
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--sandbag);
+  background: var(--fatigue);
+  border: 1px solid;
+  border-color: var(--bevel-hi) var(--bevel-lo) var(--bevel-lo) var(--bevel-hi);
+}
+
+.youtube:hover {
+  background: var(--fatigue-deep);
+}
+
+.motd {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  max-width: 52rem;
+}
+
+.motdTitle {
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 700;
+  padding-block: var(--space-1);
+}
+
+.motdBody {
+  display: grid;
+  gap: var(--space-4);
+  padding: var(--space-4) var(--space-4) var(--space-6);
+  max-width: var(--measure);
+}
+
+.motdBody code {
+  font-family: var(--font-console);
+  color: var(--tracer);
+}
+
+@media (min-width: 48rem) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 26rem);
+    align-items: end;
+    gap: var(--space-8);
+    padding-block: var(--space-12) var(--space-16);
+  }
+
+  .mascot {
+    display: block;
+    position: absolute;
+    width: clamp(9rem, 14vw, 13rem);
+    height: auto;
+    right: calc(var(--gutter) + 27rem);
+    bottom: var(--space-16);
+  }
+}
+
+@media (min-width: 64rem) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 28rem);
+  }
+
+  .mascot {
+    right: calc(var(--gutter) + 30rem);
+  }
+}
