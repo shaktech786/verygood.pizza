@@ -4,41 +4,28 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "workers": "tsx scripts/start-workers.ts",
-    "queue:status": "tsx scripts/queue-cli.ts status",
-    "queue:metrics": "tsx scripts/queue-cli.ts metrics",
-    "queue:clear": "tsx scripts/queue-cli.ts clear",
-    "queue:analyze": "tsx scripts/queue-cli.ts analyze"
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
-    "@deepgram/sdk": "^4.11.2",
-    "bullmq": "^5.63.0",
-    "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
-    "framer-motion": "^12.23.24",
-    "ioredis": "^5.8.2",
-    "lucide-react": "^0.546.0",
-    "natural": "^8.1.0",
     "next": "^16.0.10",
-    "node-cron": "^4.2.1",
     "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "tailwind-merge": "^3.3.1",
-    "youtube-transcript": "^1.2.1"
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@eslint/eslintrc": "^3",
-    "@tailwindcss/postcss": "^4",
+    "@playwright/test": "^1.65.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.6",
-    "tailwindcss": "^4",
-    "tsx": "^4.20.6",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.7"
   }
 }

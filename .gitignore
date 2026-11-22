@@ -54,3 +54,11 @@ next-env.d.ts
 
 # Playwright MCP screenshots
 .playwright-mcp
+
+# env
+.env*
+!.env.example
+
+# playwright
+/test-results/
+/playwright-report/
