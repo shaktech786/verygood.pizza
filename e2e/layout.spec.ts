@@ -45,6 +45,31 @@ test('console opens with ~, runs help, and returns focus on Escape', async ({ pa
   await expect(page.getByRole('button', { name: /console/i })).toBeFocused();
 });
 
+test('games list shows every genre, and a game without clips points to Twitch', async ({ page }) => {
+  await page.goto('/');
+  const games = page.getByRole('region', { name: 'Games' });
+  for (const genre of ['Shooter', 'Sandbox', 'Deckbuilder', 'Retro']) await expect(games).toContainText(genre);
+  const hitAndRun = games.getByRole('row', { name: /Hit & Run/ });
+  await expect(hitAndRun).toContainText('No clips yet');
+  await expect(hitAndRun.getByRole('link')).toHaveAttribute('href', 'https://www.twitch.tv/verygoodpizza');
+});
+
+test('a game row jumps to that game’s clips', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('link', { name: /Minecraft clips/ }).click();
+  await expect(page.getByRole('button', { name: 'Minecraft', exact: true })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('Prelive is promoted below the Twitch action', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/');
+  const twitch = await page.getByRole('link', { name: /twitch/i }).first().boundingBox();
+  const prelive = page.getByRole('link', { name: /prelive/i }).first();
+  await expect(prelive).toHaveAttribute('href', 'https://prelive.ai');
+  const box = await prelive.boundingBox();
+  expect(box!.y).toBeGreaterThan(twitch!.y + twitch!.height);
+});
+
 test('killfeed filter shows only that game', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'PEAK', exact: true }).click();

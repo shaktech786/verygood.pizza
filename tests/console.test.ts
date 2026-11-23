@@ -12,7 +12,7 @@ const text = (ctx: ConsoleContext, input: string) => runCommand(input, ctx).line
 describe('runCommand', () => {
   it('lists commands on help', () => {
     const out = text(offline, 'help');
-    for (const cmd of ['status', 'connect', 'clips', 'videos', 'discord', 'clear']) expect(out).toContain(cmd);
+    for (const cmd of ['status', 'connect', 'games', 'clips', 'videos', 'prelive', 'discord', 'clear']) expect(out).toContain(cmd);
   });
 
   it('prints a CS-style status block when live', () => {
@@ -35,6 +35,21 @@ describe('runCommand', () => {
     const out = text(offline, 'clips cs');
     expect(out).toContain('6 kill streak');
     expect(out).not.toContain('peak with me');
+  });
+
+  it('games lists every game with its genre', () => {
+    const out = text(offline, 'games');
+    expect(out).toContain('Slay the Spire 2');
+    expect(out).toContain('Deckbuilder');
+    expect(out).toContain('Minecraft');
+  });
+
+  it('prelive opens prelive.ai', () => {
+    expect(runCommand('prelive', offline).action).toEqual({ type: 'open', url: 'https://prelive.ai' });
+  });
+
+  it('clips spire lists Slay the Spire 2 streams', () => {
+    expect(text(offline, 'clips spire')).toContain('spire');
   });
 
   it('clips with an unknown game lists valid games', () => {
