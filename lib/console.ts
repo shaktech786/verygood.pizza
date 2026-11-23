@@ -52,7 +52,7 @@ const COMMANDS: Record<string, { help: string; run: (args: string[], ctx: Consol
       } else if (status.state === 'offline') {
         lines.push({ text: 'server is offline' });
         if (status.lastBroadcast) {
-          lines.push({ text: `last game ${hoursSince(status.lastBroadcast.startedAt, now)}h ago: ${status.lastBroadcast.title}`, tone: 'dim', href: status.lastBroadcast.url });
+          lines.push({ text: `last game ${hoursSince(status.lastBroadcast.endedAt, now)}h ago: ${status.lastBroadcast.title}`, tone: 'dim', href: status.lastBroadcast.url });
         }
       } else {
         lines.push({ text: 'server status unavailable — "connect" still works', tone: 'dim' });

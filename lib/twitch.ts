@@ -3,13 +3,19 @@ export const TWITCH_LOGIN = 'verygoodpizza';
 export interface Broadcast {
   title: string;
   url: string;
-  startedAt: string;
+  endedAt: string;
 }
 
 export type ChannelStatus =
   | { state: 'live'; title: string; game: string; viewers: number; startedAt: string }
   | { state: 'offline'; lastBroadcast?: Broadcast }
   | { state: 'unknown' };
+
+// Helix video durations look like "2h44m10s" or "44m5s".
+function durationMs(duration: string): number {
+  const [, h = '0', m = '0', s = '0'] = duration.match(/^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/) ?? [];
+  return ((Number(h) * 60 + Number(m)) * 60 + Number(s)) * 1000;
+}
 
 interface StatusOptions {
   clientId: string | undefined;
@@ -49,9 +55,12 @@ export async function getChannelStatus({ clientId, clientSecret, fetchImpl = fet
 
     const [user] = await helix<{ id: string }>(`users?login=${TWITCH_LOGIN}`);
     if (!user) return { state: 'offline' };
-    const [vod] = await helix<{ title: string; url: string; created_at: string }>(`videos?user_id=${user.id}&type=archive&first=1`);
+    const [vod] = await helix<{ title: string; url: string; created_at: string; duration: string }>(
+      `videos?user_id=${user.id}&type=archive&first=1`,
+    );
     if (!vod) return { state: 'offline' };
-    return { state: 'offline', lastBroadcast: { title: vod.title, url: vod.url, startedAt: vod.created_at } };
+    const endedAt = new Date(Date.parse(vod.created_at) + durationMs(vod.duration)).toISOString();
+    return { state: 'offline', lastBroadcast: { title: vod.title, url: vod.url, endedAt } };
   } catch (error) {
     console.error('[twitch] status lookup failed', error);
     return { state: 'unknown' };

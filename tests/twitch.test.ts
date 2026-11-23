@@ -51,9 +51,22 @@ describe('getChannelStatus', () => {
       lastBroadcast: {
         title: "the spire doesn't care what time it is",
         url: 'https://www.twitch.tv/videos/1',
-        startedAt: '2026-11-22T06:28:31Z',
+        endedAt: '2026-11-22T09:12:41.000Z',
       },
     });
+  });
+
+  it('dates the last broadcast from when it ended, for durations under an hour', async () => {
+    const fetchImpl = fakeFetch({
+      ...token,
+      ...user,
+      'helix/streams': { body: { data: [] } },
+      'helix/videos': {
+        body: { data: [{ title: 'quick one', url: 'https://www.twitch.tv/videos/2', created_at: '2026-11-22T06:00:00Z', duration: '44m5s' }] },
+      },
+    });
+    const status = await getChannelStatus({ ...creds, fetchImpl });
+    expect(status).toMatchObject({ lastBroadcast: { endedAt: '2026-11-22T06:44:05.000Z' } });
   });
 
   it('reports offline without a broadcast when there are no archives', async () => {

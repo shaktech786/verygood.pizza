@@ -41,7 +41,7 @@ export function ServerBrowser({ status, now }: { status: ChannelStatus; now: Dat
         {live && <p className={styles.streamTitle}>{status.title}</p>}
         {status.state === 'offline' && status.lastBroadcast && (
           <p className={styles.streamTitle}>
-            Last on {ago(status.lastBroadcast.startedAt, now)}: {status.lastBroadcast.title}
+            Last on {ago(status.lastBroadcast.endedAt, now)}: {status.lastBroadcast.title}
           </p>
         )}
         {status.state === 'unknown' && <p className={styles.streamTitle}>Check Twitch to see if Shak is on.</p>}
