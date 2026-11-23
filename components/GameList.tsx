@@ -7,7 +7,7 @@ export function GameList({ clips }: { clips: readonly Clip[] }) {
   return (
     <section className={`panel ${styles.window}`} aria-labelledby="games-title">
       <h2 id="games-title" className={styles.windowTitle}>
-        Games
+        What I play
       </h2>
       <div className={`sunken ${styles.scroll}`}>
         <table className={styles.table}>

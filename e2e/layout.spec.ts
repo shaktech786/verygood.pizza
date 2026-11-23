@@ -47,7 +47,7 @@ test('console opens with ~, runs help, and returns focus on Escape', async ({ pa
 
 test('games list shows every genre, and a game without clips points to Twitch', async ({ page }) => {
   await page.goto('/');
-  const games = page.getByRole('region', { name: 'Games' });
+  const games = page.getByRole('region', { name: 'What I play' });
   for (const genre of ['Shooter', 'Sandbox', 'Deckbuilder', 'Retro']) await expect(games).toContainText(genre);
   const hitAndRun = games.getByRole('row', { name: /Hit & Run/ });
   await expect(hitAndRun).toContainText('No clips yet');
