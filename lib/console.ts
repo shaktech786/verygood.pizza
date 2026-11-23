@@ -1,4 +1,5 @@
-import { CLIPS, GAMES, type GameId } from '@/content/clips';
+import { CLIPS } from '@/content/clips';
+import { GAMES, LIBRARY, type GameId } from '@/content/games';
 import { CS_SINCE, LINKS } from '@/content/links';
 import type { ChannelStatus } from '@/lib/twitch';
 
@@ -63,6 +64,12 @@ const COMMANDS: Record<string, { help: string; run: (args: string[], ctx: Consol
     help: 'join the stream on Twitch',
     run: () => ({ lines: [{ text: 'Connecting to twitch.tv/verygoodpizza...' }], action: { type: 'open', url: LINKS.twitch } }),
   },
+  games: {
+    help: 'what shak plays',
+    run: () => ({
+      lines: LIBRARY.map((g) => ({ text: `${GAMES[g].name.padEnd(26)}${GAMES[g].genre}`, tone: GAMES[g].upcoming ? 'dim' : undefined })),
+    }),
+  },
   clips: {
     help: `clips [${GAME_IDS.join('|')}]`,
     run: ([game]) => {
@@ -81,6 +88,10 @@ const COMMANDS: Record<string, { help: string; run: (args: string[], ctx: Consol
   videos: {
     help: 'open the YouTube channel',
     run: () => ({ lines: [{ text: 'Opening YouTube...' }], action: { type: 'open', url: LINKS.youtube } }),
+  },
+  prelive: {
+    help: 'the streaming tool shak built',
+    run: () => ({ lines: [{ text: 'Opening prelive.ai...' }], action: { type: 'open', url: LINKS.prelive } }),
   },
   discord: {
     help: 'join the Discord',

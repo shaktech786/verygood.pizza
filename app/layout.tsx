@@ -6,7 +6,7 @@ const stencil = Saira_Stencil_One({ weight: '400', subsets: ['latin'], variable:
 const mono = Share_Tech_Mono({ weight: '400', subsets: ['latin'], variable: '--font-mono', display: 'swap' });
 
 const description =
-  "Shak's gaming stream. Counter-Strike since 2007, plus PEAK, ARC Raiders and whatever the squad is playing tonight. Live on Twitch, clips on YouTube.";
+  "Shak's gaming stream: Counter-Strike 1.6, Minecraft, PEAK, Slay the Spire 2, retro games and whatever the squad is playing tonight. Live on Twitch, clips on YouTube.";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://verygood.pizza'),

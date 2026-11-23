@@ -7,7 +7,9 @@ Shak's gaming stream site. One job: get visitors into the Twitch stream (twitch.
 A 2007 LAN-era game client: olive bevelled panels, tan text, amber console, pepperoni red only for "live" and the primary action. No UI library — tokens live in `app/globals.css`, components use CSS Modules.
 
 - **Server browser** (`components/ServerBrowser.tsx`) — live/offline status from Twitch Helix, rendered on the server (ISR, 60s). No client JS.
+- **Games** (`components/GameList.tsx`, `content/games.ts`) — every game Shak plays with its genre, so the site isn't read as CS-only. Adding a game is one entry in `GAMES` plus its id in `LIBRARY`.
 - **Killfeed** (`components/Killfeed.tsx`) — Shak's own clips as killfeed lines, filterable by game, click-to-play.
+- **Prelive** (`components/Prelive.tsx`) — promo for Shak's own streaming toolkit, always below the Twitch action.
 - **Console** (`components/Console.tsx`, `lib/console.ts`) — press `~` or tap Console. `help`, `status`, `connect`, `clips <game>`, ...
 
 Fonts: Saira Stencil One (display), Verdana/Tahoma stack (body), Share Tech Mono (console only).

@@ -1,10 +1,12 @@
 import Image from 'next/image';
 import { Footer } from '@/components/Footer';
+import { GameList } from '@/components/GameList';
 import { Killfeed } from '@/components/Killfeed';
+import { Prelive } from '@/components/Prelive';
 import { ServerBrowser } from '@/components/ServerBrowser';
 import { TopBar } from '@/components/TopBar';
 import { CLIPS } from '@/content/clips';
-import { CS_SINCE, LINKS } from '@/content/links';
+import { LINKS } from '@/content/links';
 import { getChannelStatus } from '@/lib/twitch';
 import styles from './page.module.css';
 
@@ -27,7 +29,7 @@ export default async function Home() {
               Very Good Pizza
             </h1>
             <p className={styles.lede}>
-              Shak’s gaming stream. Counter-Strike since {CS_SINCE}, and at my best when the squad is in the call.
+              Shak’s gaming stream. Shooters, sandbox, card games and retro nights, and at my best when friends are in the call.
             </p>
           </div>
           <div className={styles.server}>
@@ -43,6 +45,10 @@ export default async function Home() {
           />
         </section>
 
+        <div className={`wrap ${styles.section}`}>
+          <GameList clips={CLIPS} />
+        </div>
+
         <section className={`wrap ${styles.section}`} aria-labelledby="killfeed-title">
           <div className={styles.sectionHead}>
             <h2 id="killfeed-title">Killfeed</h2>
@@ -54,6 +60,10 @@ export default async function Home() {
           </a>
         </section>
 
+        <div className={`wrap ${styles.section}`}>
+          <Prelive />
+        </div>
+
         <section className={`wrap ${styles.section}`} aria-labelledby="motd-title">
           <div className={`panel ${styles.motd}`}>
             <h2 id="motd-title" className={styles.motdTitle}>
@@ -61,8 +71,8 @@ export default async function Home() {
             </h2>
             <div className={`sunken ${styles.motdBody}`}>
               <p>
-                I’m Shak. I’ve been playing Counter-Strike since {CS_SINCE}, and 1.6 is still my best game. The best nights are the ones with friends in the call: PEAK climbs that fall apart,
-                ARC Raiders runs that go sideways, golf rounds we never finish.
+                I’m Shak. I play a bit of everything: Minecraft, PEAK, Slay the Spire 2, retro games, and GTA VI once it’s on PC. Counter-Strike 1.6 is still my best game; I’ve
+                played it since 2007. The best nights are the ones with friends in the call: PEAK climbs that fall apart, golf rounds we never finish.
               </p>
               <p>
                 I stream on Twitch, usually late, and the best moments end up on YouTube. Come say hi in chat. Type{' '}

@@ -5,7 +5,8 @@ export const LINKS = {
   youtubeSubscribe: 'https://www.youtube.com/@verygoodpizzaofficial?sub_confirmation=1',
   discord: '/discord',
   tiktok: 'https://www.tiktok.com/@verygood.pizza',
-  soundpad: 'https://github.com/shaktech786/soundpad-pro/releases/latest',
+  prelive: 'https://prelive.ai',
+  preliveDeck: 'https://prelive.ai/download/deck',
   shakbbx: 'https://shakbbx.com',
 } as const;
 

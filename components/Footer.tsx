@@ -26,11 +26,11 @@ export function Footer() {
         </nav>
         <div className={styles.side}>
           <p>
-            I also built{' '}
-            <a href={LINKS.soundpad} target="_blank" rel="noopener noreferrer">
-              SoundPad Pro
+            I also build{' '}
+            <a href={LINKS.prelive} target="_blank" rel="noopener noreferrer">
+              Prelive
             </a>
-            , a free soundboard for leverless and hitbox controllers, and I make music at{' '}
+            , tools for streamers, and I make music at{' '}
             <a href={LINKS.shakbbx} target="_blank" rel="noopener noreferrer">
               shakbbx.com
             </a>

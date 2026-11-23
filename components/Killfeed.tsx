@@ -1,25 +1,17 @@
 'use client';
 
-import { useState } from 'react';
-import { GAMES, type Clip, type GameId } from '@/content/clips';
+import { useEffect, useRef, useState } from 'react';
+import type { Clip } from '@/content/clips';
+import { GAMES, type GameId } from '@/content/games';
 import styles from './Killfeed.module.css';
 
 const PAGE = 10;
-
-function HeadshotMark() {
-  return (
-    <svg className={styles.headshot} viewBox="0 0 24 24" role="img" aria-label="Top clip">
-      <circle cx="12" cy="11" r="6.5" fill="none" stroke="currentColor" strokeWidth="2" />
-      <path d="M9 21h6M12 17.5V21" stroke="currentColor" strokeWidth="2" />
-      <path d="M2 3l20 15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 export function Killfeed({ clips }: { clips: readonly Clip[] }) {
   const [game, setGame] = useState<GameId | 'all'>('all');
   const [open, setOpen] = useState<string | null>(null);
   const [limit, setLimit] = useState(PAGE);
+  const root = useRef<HTMLDivElement>(null);
 
   const games = (Object.keys(GAMES) as GameId[]).filter((g) => clips.some((c) => c.game === g));
   const filtered = clips.filter((c) => game === 'all' || c.game === game);
@@ -31,8 +23,23 @@ export function Killfeed({ clips }: { clips: readonly Clip[] }) {
     setLimit(PAGE);
   };
 
+  // The games list links to #clips/<game>; follow it here.
+  useEffect(() => {
+    const follow = () => {
+      const match = /^#clips\/(\w+)$/.exec(window.location.hash);
+      if (!match || !(match[1] in GAMES)) return;
+      setGame(match[1] as GameId);
+      setOpen(null);
+      setLimit(PAGE);
+      root.current?.scrollIntoView({ block: 'start' });
+    };
+    follow();
+    window.addEventListener('hashchange', follow);
+    return () => window.removeEventListener('hashchange', follow);
+  }, []);
+
   return (
-    <div className={styles.root}>
+    <div ref={root} className={styles.root}>
       <div className={styles.filters} role="group" aria-label="Filter clips by game">
         <button type="button" className={styles.filter} aria-pressed={game === 'all'} onClick={() => pick('all')}>
           All
@@ -61,7 +68,6 @@ export function Killfeed({ clips }: { clips: readonly Clip[] }) {
                 <span className={styles.weapon} title={clip.game ? GAMES[clip.game].name : undefined}>
                   {clip.game ? GAMES[clip.game].tag : clip.kind === 'stream' ? 'VOD' : 'CLIP'}
                 </span>
-                {clip.headshot && <HeadshotMark />}
                 <span className={styles.victim}>{clip.title}</span>
               </button>
               {isOpen && (

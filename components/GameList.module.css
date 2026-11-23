@@ -1,0 +1,88 @@
+.window {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3) var(--space-3);
+  max-width: 52rem;
+}
+
+.windowTitle {
+  font-family: var(--font-body);
+  font-size: var(--step--1);
+  font-weight: 700;
+  letter-spacing: 0;
+  padding-block: var(--space-1);
+}
+
+.scroll {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--step--1);
+}
+
+.table thead th {
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  font-weight: 700;
+  color: var(--sandbag);
+  background: var(--fatigue);
+  border-bottom: 1px solid var(--bevel-lo);
+}
+
+.table tbody th,
+.table td {
+  padding: var(--space-3);
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid rgb(0 0 0 / 0.25);
+}
+
+.table tbody tr:first-child th,
+.table tbody tr:first-child td {
+  border-top: 0;
+}
+
+.table tbody th {
+  font-weight: 400;
+}
+
+.name {
+  display: block;
+  font-size: var(--step-0);
+  font-weight: 700;
+  color: var(--sandbag);
+}
+
+.note {
+  display: block;
+  color: var(--sandbag);
+}
+
+.genre {
+  font-family: var(--font-console);
+  color: var(--tracer);
+  white-space: nowrap;
+}
+
+.clips a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  margin-block: calc(var(--space-3) * -1);
+  color: var(--sandbag);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+.dim {
+  color: var(--sandbag);
+}
+
+@media (max-width: 30rem) {
+  .genre {
+    white-space: normal;
+  }
+}
