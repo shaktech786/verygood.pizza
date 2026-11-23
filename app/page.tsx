@@ -39,7 +39,7 @@ export default async function Home() {
             src="/shak-pixel.png"
             alt=""
             width={571}
-            height={552}
+            height={550}
             className={styles.mascot}
             priority
           />
